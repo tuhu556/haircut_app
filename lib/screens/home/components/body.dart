@@ -13,20 +13,20 @@ class Body extends StatelessWidget {
           children: [
             Container(
               padding: EdgeInsets.only(
-                  top: 10.0, left: 30.0, right: 30.0, bottom: 25.0),
+                  top: 10.0, left: 30.0, right: 30.0, bottom: 15.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  // Container(
-                  //   child: Text(
-                  //     "Home",
-                  //     style: TextStyle(
-                  //       fontSize: 30,
-                  //       fontWeight: FontWeight.w800,
-                  //       color: Colors.white,
-                  //     ),
-                  //   ),
-                  // ),
+                  Container(
+                    child: Text(
+                      "Home",
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

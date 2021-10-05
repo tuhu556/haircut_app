@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/screens/home/home_screen.dart';
+import 'package:haircut_app/screens/notification/notification_screen.dart';
+import 'package:haircut_app/screens/order/order_screen.dart';
+import 'package:haircut_app/screens/profile/profile_screen.dart';
 import '../enum.dart';
 
 class BottomNavBar extends StatelessWidget {
@@ -27,8 +30,8 @@ class BottomNavBar extends StatelessWidget {
           ),
         ],
         // borderRadius: BorderRadius.only(
-        //   topLeft: Radius.circular(20),
-        //   topRight: Radius.circular(20),
+        //   topLeft: Radius.circular(40),
+        //   topRight: Radius.circular(40),
         // ),
       ),
       child: SafeArea(
@@ -59,7 +62,7 @@ class BottomNavBar extends StatelessWidget {
                         : inActiveIconColor,
                   ),
                   onPressed: () {
-                    // Navigator.pushNamed(context, OrderScreen.routeName);
+                    Navigator.pushNamed(context, OrderScreen.routeName);
                   },
                 ),
               ),
@@ -72,7 +75,9 @@ class BottomNavBar extends StatelessWidget {
                         ? AppColors.color000000
                         : inActiveIconColor,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, NotificationScreen.routeName);
+                  },
                 ),
               ),
               Tooltip(
@@ -85,7 +90,7 @@ class BottomNavBar extends StatelessWidget {
                           : inActiveIconColor,
                     ),
                     onPressed: () {
-                      //Navigator.pushNamed(context, ProfileScreen.routeName),
+                      Navigator.pushNamed(context, ProfileScreen.routeName);
                     }),
               ),
             ],
