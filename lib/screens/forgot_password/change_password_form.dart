@@ -3,19 +3,16 @@ import 'package:haircut_app/components/form_error.dart';
 import 'package:haircut_app/components/rounded_button.dart';
 import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/constants/validator.dart';
-import 'package:haircut_app/screens/forgot_password/forgot_password_screen.dart';
-import 'package:haircut_app/screens/home/home_screen.dart';
 
-class LoginForm extends StatefulWidget {
+class ChangePasswordForm extends StatefulWidget {
   @override
-  _LoginFormState createState() => _LoginFormState();
+  _ChangePasswordFormState createState() => _ChangePasswordFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _ChangePasswordFormState extends State<ChangePasswordForm> {
   final _formKey = GlobalKey<FormState>();
-  String? email;
   String? password;
-  bool? remember = false;
+  String? confirmPassword;
   final List<String?> errors = [];
 
   void addError({String? error}) {
@@ -26,7 +23,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void removeError({String? error}) {
-    if (!errors.contains(error))
+    if (errors.contains(error))
       setState(() {
         errors.remove(error);
       });
@@ -39,59 +36,64 @@ class _LoginFormState extends State<LoginForm> {
       key: _formKey,
       child: Column(
         children: [
-          emailForm(),
-          SizedBox(
-            height: size.height * 0.03,
-          ),
           passwordForm(),
           SizedBox(
             height: size.height * 0.03,
           ),
-          Row(
-            children: [
-              Checkbox(
-                value: remember,
-                activeColor: AppColors.color3E3E3E,
-                onChanged: (value) {
-                  setState(() {
-                    remember = value;
-                  });
-                },
-              ),
-              Text("Remenber me"),
-              Spacer(),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    ForgotPasswordScreen.routeName,
-                  );
-                },
-                child: Text(
-                  "Forgot Password",
-                  style: TextStyle(decoration: TextDecoration.underline),
-                ),
-              )
-            ],
+          confirmPassFormForm(),
+          SizedBox(
+            height: size.height * 0.03,
           ),
           FormError(errors: errors),
           SizedBox(
-            height: size.height * 0.05,
+            height: size.height * 0.03,
           ),
           RoundedButton(
               text: "Next",
               press: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-                  Navigator.pushNamed(
-                    context,
-                    HomeScreen.routeName,
-                  );
                 }
               },
               color: AppColors.color3E3E3E,
               textColor: Colors.white),
         ],
+      ),
+    );
+  }
+
+  TextFormField confirmPassFormForm() {
+    return TextFormField(
+      obscureText: true,
+      onSaved: (newValue) => confirmPassword = newValue,
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: kPassNullError);
+        } else if (value.isNotEmpty && password == confirmPassword) {
+          removeError(error: kMatchPassError);
+        }
+        confirmPassword = value;
+      },
+      validator: (value) {
+        if (value!.isEmpty) {
+          addError(error: kPassNullError);
+          return "";
+        } else if ((password != value)) {
+          addError(error: kMatchPassError);
+          return "";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        labelText: "Confirm Password",
+        hintText: "Re-enter your password",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: Icon(
+          Icons.lock_outline,
+        ),
       ),
     );
   }
@@ -128,40 +130,6 @@ class _LoginFormState extends State<LoginForm> {
         suffixIcon: Icon(
           Icons.lock_outline,
         ),
-      ),
-    );
-  }
-
-  TextFormField emailForm() {
-    return TextFormField(
-      keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => email = newValue,
-      onChanged: (value) {
-        if (value.isNotEmpty) {
-          removeError(error: kEmailNullError);
-        } else if (emailValidatorRegExp.hasMatch(value)) {
-          removeError(error: kInvalidEmailError);
-        }
-        return null;
-      },
-      validator: (value) {
-        if (value!.isEmpty) {
-          addError(error: kEmailNullError);
-          return "";
-        } else if (!emailValidatorRegExp.hasMatch(value)) {
-          addError(error: kInvalidEmailError);
-          return "";
-        }
-        return null;
-      },
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        labelText: "Email",
-        hintText: "Enter your email",
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Icon(Icons.email_outlined),
       ),
     );
   }
