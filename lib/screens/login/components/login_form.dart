@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:haircut_app/components/form_error.dart';
 import 'package:haircut_app/components/rounded_button.dart';
@@ -5,6 +7,9 @@ import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/constants/validator.dart';
 import 'package:haircut_app/screens/forgot_password/forgot_password_screen.dart';
 import 'package:haircut_app/screens/home/home_screen.dart';
+import 'package:haircut_app/utils/api.dart';
+import 'package:http/http.dart' as http;
+
 
 class LoginForm extends StatefulWidget {
   @override
@@ -13,9 +18,10 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
-  String? email;
-  String? password;
+  late String email;
+  late String password;
   bool? remember = false;
+  bool isLoading = false;
   final List<String?> errors = [];
 
   void addError({String? error}) {
@@ -30,6 +36,44 @@ class _LoginFormState extends State<LoginForm> {
       setState(() {
         errors.remove(error);
       });
+  }
+
+  var loading = Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      CircularProgressIndicator(),
+      Text(" Authenticating ... Please wait")
+    ],
+  );
+    
+  Future _submit() async {
+    setState((){
+      isLoading = true;
+    });
+    if (!_formKey.currentState!.validate()) {
+      //invalid
+      setState((){
+        isLoading = false;
+      });
+      return;
+    }
+    _formKey.currentState!.save();
+    final url = Uri.parse('${Api.url}/customerLogin?cusEmail=${email}&password=${password}');
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      Navigator.pushNamed(context, HomeScreen.routeName);
+    } else {
+      Flushbar(
+        title: "Failed Login",
+        message: "Wrong email or password",
+        duration: Duration(seconds: 3),
+      ).show(context);
+    }
+    setState((){
+      isLoading = false;
+    });
   }
 
   @override
@@ -78,19 +122,15 @@ class _LoginFormState extends State<LoginForm> {
           SizedBox(
             height: size.height * 0.05,
           ),
-          RoundedButton(
+          !isLoading ? new RoundedButton(
               text: "Next",
               press: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  Navigator.pushNamed(
-                    context,
-                    HomeScreen.routeName,
-                  );
-                }
+                _submit();
               },
               color: AppColors.color3E3E3E,
-              textColor: Colors.white),
+              textColor: Colors.white) : Center(
+                      child: CircularProgressIndicator(),
+                    ),
         ],
       ),
     );
@@ -99,11 +139,11 @@ class _LoginFormState extends State<LoginForm> {
   TextFormField passwordForm() {
     return TextFormField(
       obscureText: true,
-      onSaved: (newValue) => password = newValue,
+      onSaved: (newValue) => password = newValue ?? "",
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
-        } else if (value.length >= 8) {
+        } else if (value.length < 1) {
           removeError(error: kShortPassError);
         }
         return null;
@@ -112,7 +152,7 @@ class _LoginFormState extends State<LoginForm> {
         if (value!.isEmpty) {
           addError(error: kPassNullError);
           return "";
-        } else if (value.length < 8) {
+        } else if (value.length < 1) {
           addError(error: kShortPassError);
           return "";
         }
@@ -135,7 +175,7 @@ class _LoginFormState extends State<LoginForm> {
   TextFormField emailForm() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => email = newValue,
+      onSaved: (newValue) => email = newValue ?? "",
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kEmailNullError);

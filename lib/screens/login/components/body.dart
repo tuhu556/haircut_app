@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:haircut_app/screens/login/components/login_form.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
 
+  @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
