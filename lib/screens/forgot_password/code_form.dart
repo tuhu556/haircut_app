@@ -4,7 +4,6 @@ import 'package:haircut_app/components/rounded_button.dart';
 import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/constants/validator.dart';
 import 'package:haircut_app/screens/forgot_password/change_password_screen.dart';
-import 'package:haircut_app/screens/home/home_screen.dart';
 
 class CodeForm extends StatefulWidget {
   @override

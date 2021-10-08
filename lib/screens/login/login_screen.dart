@@ -4,6 +4,7 @@ import 'package:haircut_app/screens/login/components/body.dart';
 
 class LoginScreen extends StatelessWidget {
   static String routeName = "/login";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

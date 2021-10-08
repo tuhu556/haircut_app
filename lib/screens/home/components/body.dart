@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haircut_app/screens/booking/booking_screen.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
@@ -42,10 +43,10 @@ class Body extends StatelessWidget {
                             image: AssetImage("assets/images/Book.png"),
                           ),
                           onTap: () {
-                            // Navigator.pushNamed(
-                            //   context,
-                            //   BookingFormScreen.routeName,
-                            // );
+                            Navigator.pushNamed(
+                              context,
+                              BookingScreen.routeName,
+                            );
                           },
                         ),
                       ),

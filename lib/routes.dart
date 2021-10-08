@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:haircut_app/screens/booking/booking_screen.dart';
 import 'package:haircut_app/screens/first/firs_screen.dart';
 import 'package:haircut_app/screens/forgot_password/change_password_screen.dart';
 import 'package:haircut_app/screens/forgot_password/forgot_password_screen.dart';
@@ -24,4 +25,5 @@ final Map<String, WidgetBuilder> routes = {
   OrderScreen.routeName: (context) => OrderScreen(),
   NotificationScreen.routeName: (context) => NotificationScreen(),
   ProfileScreen.routeName: (context) => ProfileScreen(),
+  BookingScreen.routeName: (context) => BookingScreen(),
 };
