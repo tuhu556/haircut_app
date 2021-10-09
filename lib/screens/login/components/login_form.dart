@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:haircut_app/components/form_error.dart';
@@ -58,10 +59,15 @@ class _LoginFormState extends State<LoginForm> {
       return;
     }
     _formKey.currentState!.save();
-    final url = Uri.parse('${Api.url}/customerLogin?cusEmail=${email}&password=${password}');
-
-    final response = await http.get(url);
-
+    final url = Uri.parse('${Api.url}/customerLogin');
+    Map<String, String> body = {
+    'cusEmail': email,
+    'password': password,
+    };
+    final response = await http.post(url,
+      body: body
+    );
+    
     if (response.statusCode == 200) {
       Navigator.pushNamed(context, HomeScreen.routeName);
     } else {

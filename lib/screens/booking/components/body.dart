@@ -11,6 +11,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  bool loadServices = true;
   Future<List<Service>> getServices() async {
     var response = await http
         .get(Uri.parse('https://haircut-fall-2021.herokuapp.com/api/services'));
@@ -28,6 +29,7 @@ class _BodyState extends State<Body> {
       services.add(service);
       print(service.serviceName);
     }
+    
     return services;
   }
 
@@ -40,14 +42,17 @@ class _BodyState extends State<Body> {
             child: FutureBuilder(
               future: getServices(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
-                return ListView.builder(
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else
+                  return ListView.builder(
                     itemCount: snapshot.data?.length,
                     itemBuilder: (BuildContext context, int i) {
                       return cardService(
-                          snapshot.data[i].serviceName,
-                          snapshot.data[i].price,
-                          snapshot.data[i].durationTime,
-                          false);
+                        snapshot.data[i].serviceName,
+                        snapshot.data[i].price,
+                        snapshot.data[i].durationTime,
+                        false);
                     });
               },
             ),
