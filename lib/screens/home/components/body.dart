@@ -104,7 +104,7 @@ class Body extends StatelessWidget {
                     ],
                   ),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 33),
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(

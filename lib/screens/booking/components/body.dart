@@ -12,6 +12,9 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   bool loadServices = true;
+  late List<Service> selectedList;
+
+  
   Future<List<Service>> getServices() async {
     var response = await http
         .get(Uri.parse('https://haircut-fall-2021.herokuapp.com/api/services'));
@@ -27,10 +30,15 @@ class _BodyState extends State<Body> {
       service.durationTime = e["durationTime"];
       service.status = e["status"];
       services.add(service);
-      print(service.serviceName);
     }
     
     return services;
+  }
+
+  @override
+  void initState() {
+    selectedList = List.empty();
+    super.initState();
   }
 
   @override
@@ -49,6 +57,7 @@ class _BodyState extends State<Body> {
                     itemCount: snapshot.data?.length,
                     itemBuilder: (BuildContext context, int i) {
                       return cardService(
+                        
                         snapshot.data[i].serviceName,
                         snapshot.data[i].price,
                         snapshot.data[i].durationTime,
@@ -61,30 +70,36 @@ class _BodyState extends State<Body> {
       ),
     );
   }
-}
 
-Widget cardService(
-    String serviceName, double price, int durationTime, bool isSelected) {
-  return ListTile(
-    title: Text(
-      serviceName,
-      style: TextStyle(fontWeight: FontWeight.w700),
-    ),
-    subtitle: Text('Price: ' +
-        price.toString() +
-        ' - ' +
-        'Duration Time: ' +
-        durationTime.toString() +
-        ' min'),
-    isThreeLine: true,
-    trailing: isSelected
-        ? Icon(
-            Icons.check_circle,
-            color: Colors.green[700],
-          )
-        : Icon(
-            Icons.check_circle_outline,
-            color: Colors.grey,
-          ),
-  );
+  Widget cardService(String serviceName, double price, int durationTime, bool isSelected, ) {
+    return GestureDetector(
+      child: ListTile(
+        title: Text(
+          serviceName,
+          style: TextStyle(fontWeight: FontWeight.w700),
+        ),
+        subtitle: Text('Price: ' +
+            price.toString() +
+            ' - ' +
+            'Duration Time: ' +
+            durationTime.toString() +
+            ' min'),
+        isThreeLine: true,
+        trailing: isSelected
+            ? Icon(
+                Icons.check_circle,
+                color: Colors.green[700],
+              )
+            : Icon(
+                Icons.check_circle_outline,
+                color: Colors.grey,
+              ),
+      ),
+      onTap: () {
+        //setState(() {
+          isSelected = !isSelected;
+        //});
+      },
+    );
+  }
 }
