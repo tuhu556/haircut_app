@@ -1,5 +1,7 @@
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:haircut_app/components/rounded_button.dart';
+import 'package:haircut_app/constants/color.dart';
 import 'package:intl/intl.dart';
 
 class Body extends StatefulWidget {
@@ -50,7 +52,7 @@ class _BodyState extends State<Body> {
                 children: <Widget>[
                   Container(
                     child: Text(
-                      "Home",
+                      "Date & Time",
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
@@ -137,18 +139,7 @@ class _BodyState extends State<Body> {
                           mainAxisSpacing: 18.0,  
                           childAspectRatio: 2.5,
                           children: 
-                            hours.map((hour) => /* Container(
-                              //padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                              child: Text(
-                                hour["hour"] ?? "N/A",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              decoration: BoxDecoration(
-                                color: Color(0xFFEFEEEF),
-                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                              ),
-                            ) */
+                            hours.map((hour) =>
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   textStyle: TextStyle(
@@ -169,67 +160,23 @@ class _BodyState extends State<Body> {
                                 child: Text(hour["hour"] ?? "N/A"),
                               ),
                             ).toList()
-                          /* List.generate(12, (index) {
-                              return Center(
-                                child: RaisedButton(
-                                  onPressed: (){},
-                                  color: Colors.greenAccent,
-                                  child: Text(
-                                    '${index + 9} AM',
-                                  ),
-                                ),
-                              );
-                            }
-                          ) */
                         )
-                        //getTextWidgets(),
-                        /* Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            getTextWidgets(),
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                              child: Text(
-                                "9:00",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              decoration: BoxDecoration(
-                                color: Color(0xFFEFEEEF),
-                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                              child: Text(
-                                "9:00",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              decoration: BoxDecoration(
-                                color: Color(0xFFEFEEEF),
-                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                              child: Text(
-                                "9:00",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              decoration: BoxDecoration(
-                                color: Color(0xFFEFEEEF),
-                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                              ),
-                            ),
-                          ],
-                        ), */
+                      ),
+                      SizedBox(
+                        height: size.height * 0.05,
+                      ),
+                      Center(
+                        child: RoundedButton(
+                          text: "Book",
+                          press: () {
+                          },
+                          color: Color(0xFF151515),
+                          textColor: Colors.white
+                        ),
                       )
                     ],
                   ),
                 ),
-                //padding: EdgeInsets.symmetric(horizontal: 15),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
