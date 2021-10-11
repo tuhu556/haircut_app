@@ -61,13 +61,14 @@ class _LoginFormState extends State<LoginForm> {
     _formKey.currentState!.save();
     final url = Uri.parse('${Api.url}/customerLogin');
     Map<String, String> body = {
-    'cusEmail': email,
-    'password': password,
+      'cusEmail': email,
+      'password': password,
     };
     final response = await http.post(url,
       body: body
     );
     
+    print(response.body);
     if (response.statusCode == 200) {
       Navigator.pushNamed(context, HomeScreen.routeName);
     } else {

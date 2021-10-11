@@ -74,21 +74,21 @@ class _BodyState extends State<Body> {
             ),
           ),
           selectedServices.length > 0
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 25,
-                    vertical: 10,
-                  ),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: RoundedButton(
-                        text: "Add (${selectedServices.length})",
-                        press: () {},
-                        color: AppColors.color3E3E3E,
-                        textColor: Colors.white),
-                  ),
-                )
-              : Container()
+            ? Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 25,
+                  vertical: 10,
+                ),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: RoundedButton(
+                      text: "Add (${selectedServices.length})",
+                      press: () {},
+                      color: AppColors.color3E3E3E,
+                      textColor: Colors.white),
+                ),
+              )
+            : Container()
         ],
       ),
     );
@@ -96,39 +96,72 @@ class _BodyState extends State<Body> {
 
   Widget cardService(String serviceID, String serviceName, double price,
       int durationTime, bool isSelected, int index) {
-    return ListTile(
-      title: Text(
-        serviceName,
-        style: TextStyle(fontWeight: FontWeight.w700),
+    return Container(
+      height: 90,
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+      //color: Color(0xFFF3F3F4),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10)
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 20,
+            offset: Offset(0, 1), // changes position of shadow
+          ),
+        ],
       ),
-      subtitle: Text('Price: ' +
-          price.toString() +
-          ' - ' +
-          'Duration Time: ' +
-          durationTime.toString() +
-          ' min'),
-      isThreeLine: true,
-      trailing: isSelected
-          ? Icon(
-              Icons.check_circle,
-              color: Colors.green[700],
-            )
-          : Icon(
-              Icons.check_circle_outline,
-              color: Colors.grey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ListTile(
+            leading: Image.asset("assets/images/logo.png"),
+            title: Container(
+              margin: EdgeInsets.only(bottom: 10),
+              child: Text(
+                serviceName,
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
             ),
-      onTap: () {
-        setState(() {
-          services[index].isSelected = !services[index].isSelected;
-          if (services[index].isSelected == true) {
-            selectedServices.add(services[index]);
-          } else if (services[index].isSelected == false) {
-            selectedServices.removeWhere(
-              (element) => element.serviceID == services[index].serviceID,
-            );
-          }
-        });
-      },
+            subtitle: Text('Price: ' +
+                price.toString() +
+                '\n' +
+                'Duration Time: ' +
+                durationTime.toString() +
+                ' min'),
+            isThreeLine: false,
+            trailing: isSelected
+                ? Icon(
+                    Icons.check_circle,
+                    color: Colors.green[700],
+                  )
+                : Icon(
+                    Icons.check_circle_outline,
+                    color: Colors.grey,
+                  ),
+            onTap: () {
+              setState(() {
+                services[index].isSelected = !services[index].isSelected;
+                if (services[index].isSelected == true) {
+                  selectedServices.add(services[index]);
+                } else if (services[index].isSelected == false) {
+                  selectedServices.removeWhere(
+                    (element) => element.serviceID == services[index].serviceID,
+                  );
+                }
+              });
+            },
+          )
+        ],
+      )
+      /**/
     );
   }
 }

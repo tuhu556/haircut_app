@@ -29,6 +29,7 @@ class BookingScreen extends StatelessWidget {
         backgroundColor: AppColors.color3E3E3E,
       ),
       body: Body(),
+      backgroundColor: Colors.white,
     );
   }
 }

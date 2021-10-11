@@ -3,6 +3,8 @@ import 'package:haircut_app/components/form_error.dart';
 import 'package:haircut_app/components/rounded_button.dart';
 import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/constants/validator.dart';
+import 'package:haircut_app/utils/api.dart';
+import 'package:http/http.dart' as http;
 
 class SignUpForm extends StatefulWidget {
   @override
@@ -11,11 +13,12 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
-  String? email;
-  String? password;
-  String? confirmPassword;
-  String? phoneNumber;
-  bool remember = false;
+  late String email;
+  late String fullName;
+  late String password;
+  late String confirmPassword;
+  late String phoneNumber;
+  bool isLoading = false;
   final List<String?> errors = [];
 
   void addError({String? error}) {
@@ -32,6 +35,37 @@ class _SignUpFormState extends State<SignUpForm> {
       });
   }
 
+  Future _submit() async {
+    setState((){
+      isLoading = true;
+    });
+    if (!_formKey.currentState!.validate()) {
+      //invalid
+      setState((){
+        isLoading = false;
+      });
+      return;
+    }
+    _formKey.currentState!.save();
+    final url = Uri.parse('${Api.url}/addNewCustomer');
+    Map<String, String> body = {
+      'cusEmail': email,
+      'password': password,
+    };
+    final response = await http.post(url,
+      body: body
+    );
+    
+    if (response.statusCode == 200) {
+     //Navigator.pushNamed(context, HomeScreen.routeName);
+    } else {
+
+    }
+    setState((){
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -40,6 +74,10 @@ class _SignUpFormState extends State<SignUpForm> {
       child: Column(
         children: [
           emailForm(),
+          SizedBox(
+            height: size.height * 0.03,
+          ),
+          fullNameForm(),
           SizedBox(
             height: size.height * 0.03,
           ),
@@ -60,11 +98,9 @@ class _SignUpFormState extends State<SignUpForm> {
             height: size.height * 0.03,
           ),
           RoundedButton(
-              text: "Next",
+              text: "Sign up",
               press: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                }
+                _submit();
               },
               color: AppColors.color3E3E3E,
               textColor: Colors.white),
@@ -76,7 +112,7 @@ class _SignUpFormState extends State<SignUpForm> {
   TextFormField phoneNumberForm() {
     return TextFormField(
       keyboardType: TextInputType.phone,
-      onSaved: (newValue) => phoneNumber = newValue,
+      onSaved: (newValue) => phoneNumber = newValue ?? "",
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPhoneNumberNullError);
@@ -110,7 +146,7 @@ class _SignUpFormState extends State<SignUpForm> {
   TextFormField confirmPassFormForm() {
     return TextFormField(
       obscureText: true,
-      onSaved: (newValue) => confirmPassword = newValue,
+      onSaved: (newValue) => confirmPassword = newValue ?? "",
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
@@ -146,7 +182,7 @@ class _SignUpFormState extends State<SignUpForm> {
   TextFormField passwordForm() {
     return TextFormField(
       obscureText: true,
-      onSaved: (newValue) => password = newValue,
+      onSaved: (newValue) => password = newValue ?? "",
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
@@ -182,7 +218,7 @@ class _SignUpFormState extends State<SignUpForm> {
   TextFormField emailForm() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => email = newValue,
+      onSaved: (newValue) => email = newValue ?? "",
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kEmailNullError);
@@ -209,6 +245,35 @@ class _SignUpFormState extends State<SignUpForm> {
         hintText: "Enter your email",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: Icon(Icons.email_outlined),
+      ),
+    );
+  }
+
+  TextFormField fullNameForm() {
+    return TextFormField(
+      keyboardType: TextInputType.name,
+      onSaved: (newValue) => fullName = newValue ?? "",
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: kNamelNullError);
+        }
+        return null;
+      },
+      validator: (value) {
+        if (value!.isEmpty) {
+          addError(error: kNamelNullError);
+          return "";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        labelText: "Full Name",
+        hintText: "Enter your Full Name",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: Icon(Icons.contact_mail),
       ),
     );
   }

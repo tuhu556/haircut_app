@@ -1,3 +1,3 @@
 class Api{
-  static const url = 'https://haircut-fall-2021.herokuapp.com/api';
+  static const url = 'https://hair-cut.herokuapp.com/api';
 }

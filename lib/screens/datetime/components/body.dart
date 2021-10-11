@@ -1,7 +1,6 @@
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:haircut_app/components/rounded_button.dart';
-import 'package:haircut_app/constants/color.dart';
 import 'package:intl/intl.dart';
 
 class Body extends StatefulWidget {
@@ -111,7 +110,6 @@ class _BodyState extends State<Body> {
                               ),
                               margin: EdgeInsets.only(bottom: 15),
                             ),
-
                           ],
                         ),
                       ),
@@ -160,6 +158,7 @@ class _BodyState extends State<Body> {
                                 child: Text(hour["hour"] ?? "N/A"),
                               ),
                             ).toList()
+                          
                         )
                       ),
                       SizedBox(
