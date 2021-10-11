@@ -10,6 +10,7 @@ class Service {
   double? price;
   bool? status;
   int? durationTime;
+  bool isSelected;
 
   Service(
       {this.id,
@@ -17,7 +18,8 @@ class Service {
       this.serviceName,
       this.price,
       this.durationTime,
-      this.status});
+      this.status,
+      this.isSelected = false});
 
   factory Service.formJson(Map<String, dynamic> json) {
     return Service(

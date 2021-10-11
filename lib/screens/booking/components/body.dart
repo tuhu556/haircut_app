@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:haircut_app/components/rounded_button.dart';
+import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/models/service.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,15 +13,14 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  bool loadServices = true;
-  late List<Service> selectedList;
+  List<Service> selectedServices = [];
+  List<Service> services = [];
+  late Future<List<Service>> _getService;
 
-  
   Future<List<Service>> getServices() async {
     var response = await http
-        .get(Uri.parse('https://haircut-fall-2021.herokuapp.com/api/services'));
+        .get(Uri.parse('https://hair-cut.herokuapp.com/api/availableServices'));
     var jsonData = json.decode(response.body);
-    List<Service> services = [];
 
     for (var e in jsonData) {
       Service service = new Service();
@@ -31,13 +32,13 @@ class _BodyState extends State<Body> {
       service.status = e["status"];
       services.add(service);
     }
-    
+
     return services;
   }
 
   @override
   void initState() {
-    selectedList = List.empty();
+    _getService = getServices();
     super.initState();
   }
 
@@ -48,57 +49,85 @@ class _BodyState extends State<Body> {
         children: [
           Expanded(
             child: FutureBuilder(
-              future: getServices(),
+              future: _getService,
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error'),
+                  );
                 } else
                   return ListView.builder(
-                    itemCount: snapshot.data?.length,
-                    itemBuilder: (BuildContext context, int i) {
-                      return cardService(
-                        
-                        snapshot.data[i].serviceName,
-                        snapshot.data[i].price,
-                        snapshot.data[i].durationTime,
-                        false);
-                    });
+                      itemCount: snapshot.data?.length,
+                      itemBuilder: (BuildContext context, int i) {
+                        return cardService(
+                            snapshot.data[i].serviceID,
+                            snapshot.data[i].serviceName,
+                            snapshot.data[i].price,
+                            snapshot.data[i].durationTime,
+                            snapshot.data[i].isSelected,
+                            i);
+                      });
               },
             ),
           ),
+          selectedServices.length > 0
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 25,
+                    vertical: 10,
+                  ),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: RoundedButton(
+                        text: "Add (${selectedServices.length})",
+                        press: () {},
+                        color: AppColors.color3E3E3E,
+                        textColor: Colors.white),
+                  ),
+                )
+              : Container()
         ],
       ),
     );
   }
 
-  Widget cardService(String serviceName, double price, int durationTime, bool isSelected, ) {
-    return GestureDetector(
-      child: ListTile(
-        title: Text(
-          serviceName,
-          style: TextStyle(fontWeight: FontWeight.w700),
-        ),
-        subtitle: Text('Price: ' +
-            price.toString() +
-            ' - ' +
-            'Duration Time: ' +
-            durationTime.toString() +
-            ' min'),
-        isThreeLine: true,
-        trailing: isSelected
-            ? Icon(
-                Icons.check_circle,
-                color: Colors.green[700],
-              )
-            : Icon(
-                Icons.check_circle_outline,
-                color: Colors.grey,
-              ),
+  Widget cardService(String serviceID, String serviceName, double price,
+      int durationTime, bool isSelected, int index) {
+    return ListTile(
+      title: Text(
+        serviceName,
+        style: TextStyle(fontWeight: FontWeight.w700),
       ),
+      subtitle: Text('Price: ' +
+          price.toString() +
+          ' - ' +
+          'Duration Time: ' +
+          durationTime.toString() +
+          ' min'),
+      isThreeLine: true,
+      trailing: isSelected
+          ? Icon(
+              Icons.check_circle,
+              color: Colors.green[700],
+            )
+          : Icon(
+              Icons.check_circle_outline,
+              color: Colors.grey,
+            ),
       onTap: () {
-        //setState(() {
-          isSelected = !isSelected;
-        //});
+        setState(() {
+          services[index].isSelected = !services[index].isSelected;
+          if (services[index].isSelected == true) {
+            selectedServices.add(services[index]);
+          } else if (services[index].isSelected == false) {
+            selectedServices.removeWhere(
+              (element) => element.serviceID == services[index].serviceID,
+            );
+          }
+        });
       },
     );
   }

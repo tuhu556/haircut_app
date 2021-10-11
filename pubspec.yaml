@@ -36,6 +36,7 @@ dependencies:
   another_flushbar: ^1.10.24
   date_picker_timeline: ^1.2.3
   intl: ^0.17.0
+  card_swiper: ^1.0.4
 dev_dependencies:
   flutter_test:
     sdk: flutter

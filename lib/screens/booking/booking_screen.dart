@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/screens/booking/components/body.dart';
+import 'package:haircut_app/screens/booking/components/body2.dart';
 import 'package:haircut_app/screens/datetime/datetime_screen.dart';
 
 class BookingScreen extends StatelessWidget {
@@ -22,7 +23,7 @@ class BookingScreen extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(context, DatetimeScreen.routeName);
             },
-            child: const Text('Tiếp theo'),
+            child: const Text('Next'),
           ),
         ],
         backgroundColor: AppColors.color3E3E3E,
