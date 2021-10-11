@@ -3,6 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:haircut_app/components/rounded_button.dart';
 import 'package:intl/intl.dart';
 
+class Hours {
+  int? id;
+  String? time;
+
+  Hours(this.id, this.time);
+}
+
 class Body extends StatefulWidget {
   const Body({ Key? key }) : super(key: key);
 
@@ -13,6 +20,8 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   String curMonth = "";
   String curYear = "";
+  List<Hours> listHour = [];
+  int pressedTime = 0;
   var hours = [
     {"hour": "9:00"},
     {"hour": "10:00"},
@@ -30,13 +39,24 @@ class _BodyState extends State<Body> {
 
   void initState() {
     super.initState();
+    listHour.add(new Hours(1, "9:00"));
+    listHour.add(new Hours(2, "10:00"));
+    listHour.add(new Hours(3, "11:00"));
+    listHour.add(new Hours(4, "12:00"));
+    listHour.add(new Hours(5, "13:00"));
+    listHour.add(new Hours(6, "14:00"));
+    listHour.add(new Hours(7, "15:00"));
+    listHour.add(new Hours(8, "16:00"));
+    listHour.add(new Hours(9, "17:00"));
+    listHour.add(new Hours(10, "18:00"));
+    listHour.add(new Hours(11, "19:00"));
+    listHour.add(new Hours(12, "20:00"));
     curMonth = DateFormat.MMMM().format(DateTime.now());
     curYear = DateFormat.y().format(DateTime.now());
   }
 
   @override
   Widget build(BuildContext context) {
-    bool pressedTime = false;
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Center(
@@ -137,15 +157,15 @@ class _BodyState extends State<Body> {
                           mainAxisSpacing: 18.0,  
                           childAspectRatio: 2.5,
                           children: 
-                            hours.map((hour) =>
+                            listHour.map((hour) =>
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   textStyle: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold
                                   ),
-                                  primary: pressedTime ? Colors.black : Color(0xFFEFEEEF),
-                                  onPrimary: Colors.black,
+                                  primary: pressedTime == hour.id ? Colors.black : Color(0xFFEFEEEF),
+                                  onPrimary: pressedTime == hour.id ? Colors.white : Colors.black,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
@@ -153,12 +173,17 @@ class _BodyState extends State<Body> {
                                   shadowColor: Colors.black,
                                 ),
                                 onPressed: () {
-                                  setState(() => pressedTime = !pressedTime);
+                                  setState(() {
+                                    if (pressedTime == hour.id) {
+                                      pressedTime = 0;
+                                    } else {
+                                      pressedTime = hour.id ?? 0;
+                                    }
+                                  });
                                 },
-                                child: Text(hour["hour"] ?? "N/A"),
+                                child: Text(hour.time ?? "N/A"),
                               ),
                             ).toList()
-                          
                         )
                       ),
                       SizedBox(
