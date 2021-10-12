@@ -4,6 +4,8 @@ import 'package:haircut_app/components/rounded_button.dart';
 import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/constants/validator.dart';
 import 'package:haircut_app/screens/forgot_password/change_password_screen.dart';
+import 'package:haircut_app/utils/api.dart';
+import 'package:http/http.dart' as http;
 
 class CodeForm extends StatefulWidget {
   @override
@@ -12,7 +14,9 @@ class CodeForm extends StatefulWidget {
 
 class _CodeFormState extends State<CodeForm> {
   final _formKey = GlobalKey<FormState>();
-  String? code;
+  late String code;
+  late String email;
+  bool isLoading = false;
   final List<String?> errors = [];
 
   void addError({String? error}) {
@@ -29,8 +33,45 @@ class _CodeFormState extends State<CodeForm> {
       });
   }
 
+  Future _submit() async {
+    setState((){
+      isLoading = true;
+      errors.clear();
+    });
+    if (!_formKey.currentState!.validate()) {
+      //invalid
+      setState((){
+        isLoading = false;
+      });
+      return;
+    }
+
+    final url = Uri.parse('${Api.url}/checkCode?cusEmail=${email}&code=${code}');
+    final response = await http.get(url);
+    
+    print(email);
+    print(code);
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      //Navigator.pushNamed(context, Hom.routeName);
+    } else if (response.statusCode == 404) {
+      addError(error: "Your code didn't mismatch");
+      /* Flushbar(
+        title: "Error",
+        message: "Email existed",
+        duration: Duration(seconds: 3),
+      ).show(context); */
+    }
+    setState((){
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    if (arguments != null) email = arguments['email'];
+    //email = arguments["email"];
     Size size = MediaQuery.of(context).size;
     return Form(
       key: _formKey,
@@ -45,15 +86,16 @@ class _CodeFormState extends State<CodeForm> {
             height: size.height * 0.05,
           ),
           RoundedButton(
-              text: "Next",
+              text: "Verify",
               press: () {
-                if (_formKey.currentState!.validate()) {
+                /* if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   Navigator.pushNamed(
                     context,
                     ChangePasswordScreen.routeName,
                   );
-                }
+                } */
+                _submit();
               },
               color: AppColors.color3E3E3E,
               textColor: Colors.white),
@@ -65,12 +107,12 @@ class _CodeFormState extends State<CodeForm> {
   TextFormField codeForm() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => code = newValue,
+      onSaved: (newValue) => code = newValue ?? "",
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kCodeNullError);
         }
-        return null;
+        code = value;
       },
       validator: (value) {
         if (value!.isEmpty) {

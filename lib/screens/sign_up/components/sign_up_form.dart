@@ -1,8 +1,12 @@
+import 'dart:convert';
+
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:haircut_app/components/form_error.dart';
 import 'package:haircut_app/components/rounded_button.dart';
 import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/constants/validator.dart';
+import 'package:haircut_app/screens/forgot_password/verify_code_screen.dart';
 import 'package:haircut_app/utils/api.dart';
 import 'package:http/http.dart' as http;
 
@@ -38,6 +42,7 @@ class _SignUpFormState extends State<SignUpForm> {
   Future _submit() async {
     setState((){
       isLoading = true;
+      errors.clear();
     });
     if (!_formKey.currentState!.validate()) {
       //invalid
@@ -51,15 +56,26 @@ class _SignUpFormState extends State<SignUpForm> {
     Map<String, String> body = {
       'cusEmail': email,
       'password': password,
+      'cusName': fullName,
+      'phone': phoneNumber,
+      'status': 'inactive',
+      'verifyCode': '123',
     };
     final response = await http.post(url,
-      body: body
+      headers: {"Content-Type": "application/json"},
+      body: json.encode(body)
     );
     
-    if (response.statusCode == 200) {
-     //Navigator.pushNamed(context, HomeScreen.routeName);
-    } else {
-
+    print(response.statusCode);
+    if (response.statusCode == 201) {
+      Navigator.pushNamed(context, VerifyCodeScreen.routeName, arguments: {'email': email});
+    } else if (response.statusCode == 208) {
+      addError(error: "Email existed");
+      /* Flushbar(
+        title: "Error",
+        message: "Email existed",
+        duration: Duration(seconds: 3),
+      ).show(context); */
     }
     setState((){
       isLoading = false;
@@ -97,13 +113,13 @@ class _SignUpFormState extends State<SignUpForm> {
           SizedBox(
             height: size.height * 0.03,
           ),
-          RoundedButton(
+          !isLoading ? RoundedButton(
               text: "Sign up",
               press: () {
                 _submit();
               },
               color: AppColors.color3E3E3E,
-              textColor: Colors.white),
+              textColor: Colors.white) : Center(child: CircularProgressIndicator())
         ],
       ),
     );
@@ -186,16 +202,17 @@ class _SignUpFormState extends State<SignUpForm> {
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
-        } else if (value.length >= 8) {
+        } else if (value.length > 0) {
           removeError(error: kShortPassError);
         }
-        return null;
+        password = value;
+        print(password);
       },
       validator: (value) {
         if (value!.isEmpty) {
           addError(error: kPassNullError);
           return "";
-        } else if (value.length < 8) {
+        } else if (value.length < 1) {
           addError(error: kShortPassError);
           return "";
         }

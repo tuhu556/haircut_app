@@ -112,7 +112,18 @@ class _BodyState extends State<Body> {
                             press: () {},
                             color: Color(0xFF151515),
                             textColor: Colors.white),
-                      )
+                      ),
+                      /* if (pressedTime != 0) ...[
+                        Center(
+                          child: RoundedButton(
+                            text: "Book",
+                            press: () {
+                            },
+                            color: Color(0xFF151515),
+                            textColor: Colors.white
+                          ),
+                        )
+                      ] */
                     ],
                   ),
                 ),
