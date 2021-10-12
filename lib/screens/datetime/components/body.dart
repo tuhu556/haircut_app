@@ -1,5 +1,6 @@
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:date_time_picker_widget/date_time_picker_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:haircut_app/components/rounded_button.dart';
 import 'package:haircut_app/constants/color.dart';
@@ -111,7 +112,7 @@ class _BodyState extends State<Body> {
                           height: size.height * 0.03,
                         ),
                         //_timePicker(),
-                        _dateTimePicker(),
+                        Container(child: _dateTimePicker(), padding: EdgeInsets.symmetric(horizontal: 5),),
                         SizedBox(
                           height: size.height * 0.05,
                         ),
@@ -149,7 +150,7 @@ class _BodyState extends State<Body> {
         Text(
           'Time: $_t1',
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText2,
+          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18.0)
         ),
         DateTimePicker(
           initialSelectedDate: dt,
@@ -179,16 +180,16 @@ class _BodyState extends State<Body> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
+        /* Text(
           'Date & Time Picker',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline6,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 8), */
         Text(
-          'Date: $_d1  Time: $_t1',
+          'Booking Date: $_d1\nTime: $_t1',
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText2,
+          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18.0),
         ),
         const SizedBox(height: 16),
         DateTimePicker(
@@ -198,8 +199,8 @@ class _BodyState extends State<Body> {
           startTime: DateTime(dt.year, dt.month, dt.day, 7),
           endTime: DateTime(dt.year, dt.month, dt.day, 18),
           timeInterval: const Duration(minutes: 30),
-          datePickerTitle: 'Pick your preferred date',
-          timePickerTitle: 'Pick your preferred time',
+          datePickerTitle: 'Pick your date',
+          timePickerTitle: 'Pick your time',
           timeOutOfRangeError: 'Sorry shop is closed now',
           is24h: true,
           numberOfWeeksToDisplay: 1,

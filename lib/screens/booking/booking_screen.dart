@@ -12,7 +12,7 @@ class BookingScreen extends StatelessWidget {
     final ButtonStyle style =
         TextButton.styleFrom(primary: Theme.of(context).colorScheme.onPrimary);
     return Scaffold(
-      appBar: AppBar(
+      /* appBar: AppBar(
         title: Text(
           "Select Service",
           style: TextStyle(color: Colors.white),
@@ -27,9 +27,9 @@ class BookingScreen extends StatelessWidget {
           ),
         ],
         backgroundColor: AppColors.color3E3E3E,
-      ),
+      ), */
       body: Body(),
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.color3E3E3E,
     );
   }
 }

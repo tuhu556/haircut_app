@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:haircut_app/routes.dart';
 import 'package:haircut_app/screens/splash/splash_screen.dart';
 
@@ -13,7 +14,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Hair cut App',
-      theme: ThemeData(fontFamily: 'Poppins'),
+      theme: ThemeData(textTheme: GoogleFonts.poppinsTextTheme(
+        Theme.of(context).textTheme,
+      ),),
       initialRoute: SplashScreen.routeName,
       routes: routes,
     );

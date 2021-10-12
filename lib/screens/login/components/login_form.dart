@@ -7,6 +7,7 @@ import 'package:haircut_app/components/rounded_button.dart';
 import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/constants/validator.dart';
 import 'package:haircut_app/screens/forgot_password/forgot_password_screen.dart';
+import 'package:haircut_app/screens/forgot_password/verify_code_screen.dart';
 import 'package:haircut_app/screens/home/home_screen.dart';
 import 'package:haircut_app/utils/api.dart';
 import 'package:http/http.dart' as http;
@@ -68,9 +69,12 @@ class _LoginFormState extends State<LoginForm> {
       body: body
     );
     
+    print(response.statusCode);
     print(response.body);
     if (response.statusCode == 200) {
       Navigator.pushNamed(context, HomeScreen.routeName);
+    } else if (response.statusCode == 208) {
+      Navigator.pushNamed(context, VerifyCodeScreen.routeName, arguments: {'email': email});
     } else {
       Flushbar(
         title: "Failed Login",

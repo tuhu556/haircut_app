@@ -38,6 +38,7 @@ dependencies:
   intl: ^0.17.0
   card_swiper: ^1.0.4
   date_time_picker_widget: ^1.0.1+4
+  google_fonts: ^2.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

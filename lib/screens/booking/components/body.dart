@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:haircut_app/components/rounded_button.dart';
 import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/models/service.dart';
+import 'package:haircut_app/screens/datetime/datetime_screen.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -45,59 +48,109 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(
-        children: [
-          Expanded(
-            child: FutureBuilder(
-              future: _getService,
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error'),
-                  );
-                } else
-                  return ListView.builder(
-                      itemCount: snapshot.data?.length,
-                      itemBuilder: (BuildContext context, int i) {
-                        return cardService(
-                            snapshot.data[i].serviceID,
-                            snapshot.data[i].serviceName,
-                            snapshot.data[i].price,
-                            snapshot.data[i].durationTime,
-                            snapshot.data[i].isSelected,
-                            i);
-                      });
-              },
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.only(
+                  top: 5.0, left: 30.0, right: 30.0, bottom: 5.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    child: Text(
+                      "Home",
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          selectedServices.length > 0
-            ? Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 25,
-                  vertical: 10,
+            Expanded(
+              child: Stack(
+                children: [
+                  Container(
+                    child: FutureBuilder(
+                      future: _getService,
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text('Error'),
+                          );
+                        } else
+                          return ListView.builder(
+                              itemCount: snapshot.data?.length,
+                              itemBuilder: (BuildContext context, int i) {
+                                return cardService(
+                                    snapshot.data[i].serviceID,
+                                    snapshot.data[i].serviceName,
+                                    snapshot.data[i].price,
+                                    snapshot.data[i].durationTime,
+                                    snapshot.data[i].isSelected,
+                                    i);
+                              });
+                      },
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: selectedServices.length > 0 ? Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: RoundedButton(
+                        text: "Book (${selectedServices.length})",
+                        press: () {
+                          Navigator.pushNamed(context, DatetimeScreen.routeName, arguments: {"services": selectedServices});
+                        },
+                        color: Colors.black,
+                        textColor: Colors.white
+                      ),
+                    ) : null,
+                  )
+                ]
+              ),
+            ),
+            
+            /* selectedServices.length > 0 ? Center(
+              child: Container(
+                color: Colors.transparent,
+                //padding: const EdgeInsets.symmetric(vertical: 5),
+                child: RoundedButton(
+                  text: "Book (${selectedServices.length})",
+                  press: () {
+
+                  },
+                  color: Colors.white,
+                  textColor: Colors.white
                 ),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: RoundedButton(
-                      text: "Add (${selectedServices.length})",
-                      press: () {},
-                      color: AppColors.color3E3E3E,
-                      textColor: Colors.white),
-                ),
-              )
-            : Container()
-        ],
+              ),
+            ) : Container() */
+          ],
+        ),
       ),
     );
   }
 
   Widget cardService(String serviceID, String serviceName, double price,
       int durationTime, bool isSelected, int index) {
+    final currencyFormatter = NumberFormat.currency(locale: 'vi');
     return Container(
-      height: 90,
+      height: 110,
       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
       //color: Color(0xFFF3F3F4),
       decoration: BoxDecoration(
@@ -127,25 +180,24 @@ class _BodyState extends State<Body> {
               margin: EdgeInsets.only(bottom: 10),
               child: Text(
                 serviceName,
-                style: TextStyle(fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
               ),
             ),
-            subtitle: Text('Price: ' +
-                price.toString() +
-                '\n' +
-                'Duration Time: ' +
-                durationTime.toString() +
-                ' min'),
+            subtitle: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Duration Time ${durationTime.toString()} min"),
+                Container(
+                  margin: EdgeInsets.only(top: 5),
+                  child: Text("${currencyFormatter.format(price)}", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF4063c0)),)
+                )
+            ],),
             isThreeLine: false,
-            trailing: isSelected
-                ? Icon(
-                    Icons.check_circle,
-                    color: Colors.green[700],
-                  )
-                : Icon(
-                    Icons.check_circle_outline,
-                    color: Colors.grey,
-                  ),
+            trailing: Container(
+                child: isSelected ? Icon(Icons.check_circle, color: Colors.green[700]) : Icon(Icons.check_circle_outline, color: Colors.grey),
+                margin: EdgeInsets.only(top: 19),
+            ),
             onTap: () {
               setState(() {
                 services[index].isSelected = !services[index].isSelected;

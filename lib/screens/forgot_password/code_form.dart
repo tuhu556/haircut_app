@@ -4,6 +4,7 @@ import 'package:haircut_app/components/rounded_button.dart';
 import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/constants/validator.dart';
 import 'package:haircut_app/screens/forgot_password/change_password_screen.dart';
+import 'package:haircut_app/screens/home/home_screen.dart';
 import 'package:haircut_app/utils/api.dart';
 import 'package:http/http.dart' as http;
 
@@ -45,16 +46,14 @@ class _CodeFormState extends State<CodeForm> {
       });
       return;
     }
-
+    
     final url = Uri.parse('${Api.url}/checkCode?cusEmail=${email}&code=${code}');
     final response = await http.get(url);
     
-    print(email);
-    print(code);
     print(response.statusCode);
     if (response.statusCode == 200) {
-      //Navigator.pushNamed(context, Hom.routeName);
-    } else if (response.statusCode == 404) {
+      Navigator.pushNamed(context, HomeScreen.routeName);
+    } else if (response.statusCode == 204) {
       addError(error: "Your code didn't mismatch");
       /* Flushbar(
         title: "Error",
