@@ -129,8 +129,8 @@ class _BodyState extends State<Body> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25.0),
-                      topRight: Radius.circular(25.0),
+                      topLeft: Radius.circular(20.0),
+                      topRight: Radius.circular(20.0),
                     ),
                   ),
                 ),
@@ -211,7 +211,7 @@ class _BodyState extends State<Body> {
           },
           onTimeChanged: (time) {
             setState(() {
-              _t1 = DateFormat('hh:mm:ss aa').format(time);
+              _t1 = DateFormat('H:mm').format(time);
             });
           },
         )

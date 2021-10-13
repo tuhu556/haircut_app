@@ -134,7 +134,7 @@ class _LoginFormState extends State<LoginForm> {
             height: size.height * 0.05,
           ),
           !isLoading ? new RoundedButton(
-              text: "Next",
+              text: "Log in",
               press: () {
                 _submit();
               },

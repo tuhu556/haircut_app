@@ -14,7 +14,7 @@ class Body extends StatelessWidget {
           children: [
             Container(
               padding: EdgeInsets.only(
-                  top: 10.0, left: 30.0, right: 30.0, bottom: 15.0),
+                  top: 10.0, left: 30.0, right: 30.0, bottom: 7.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -22,7 +22,7 @@ class Body extends StatelessWidget {
                     child: Text(
                       "Home",
                       style: TextStyle(
-                        fontSize: 30,
+                        fontSize: 24,
                         fontWeight: FontWeight.w800,
                         color: Colors.white,
                       ),
@@ -108,8 +108,8 @@ class Body extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40.0),
-                    topRight: Radius.circular(40.0),
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
                   ),
                 ),
               ),

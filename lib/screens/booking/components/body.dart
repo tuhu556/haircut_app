@@ -54,15 +54,15 @@ class _BodyState extends State<Body> {
           children: [
             Container(
               padding: EdgeInsets.only(
-                  top: 5.0, left: 30.0, right: 30.0, bottom: 5.0),
+                  top: 10.0, left: 30.0, right: 30.0, bottom: 7.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(
                     child: Text(
-                      "Home",
+                      "Services",
                       style: TextStyle(
-                        fontSize: 30,
+                        fontSize: 24,
                         fontWeight: FontWeight.w800,
                         color: Colors.white,
                       ),
