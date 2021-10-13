@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:haircut_app/screens/profile/components/profile_menu.dart';
 
-class Body extends StatelessWidget {
-  const Body({Key? key}) : super(key: key);
+class Body extends StatefulWidget {
+  const Body({ Key? key }) : super(key: key);
 
+  @override
+  _BodyState createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -20,7 +24,7 @@ class Body extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     child: Text(
-                      "Profile",
+                      "My Bookings",
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
@@ -37,41 +41,24 @@ class Body extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
+                      Center(
+                        child: GestureDetector(
+                          child: Image(
+                            image: AssetImage("assets/images/Book.png"),
+                          ),
+                          onTap: () {
+                            
+                          },
+                        ),
+                      ),
                       SizedBox(
                         height: size.height * 0.05,
                       ),
-                      Text(
-                        "Hello...",
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.w700),
-                      ),
-                      SizedBox(
-                        height: size.height * 0.1,
-                      ),
-                      ProfileMenu(
-                        text: "My Account",
-                        icon: "assets/icons/User Icon.svg",
-                        press: () => {},
-                      ),
-                      ProfileMenu(
-                        text: "Settings",
-                        icon: "assets/icons/Settings.svg",
-                        press: () {},
-                      ),
-                      ProfileMenu(
-                        text: "Help Center",
-                        icon: "assets/icons/Question mark.svg",
-                        press: () {},
-                      ),
-                      ProfileMenu(
-                        text: "Log Out",
-                        icon: "assets/icons/Log out.svg",
-                        press: () {},
-                      ),
+                      
                     ],
                   ),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 33),
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(

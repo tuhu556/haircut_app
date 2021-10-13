@@ -48,8 +48,11 @@ class BottomNavBar extends StatelessWidget {
                         ? AppColors.color000000
                         : inActiveIconColor,
                   ),
-                  onPressed: () =>
+                  onPressed: () => {
+                    if (MenuState.home != selectedMenu)
                       Navigator.pushNamed(context, HomeScreen.routeName),
+                  }
+                      
                 ),
               ),
               Tooltip(
@@ -62,7 +65,8 @@ class BottomNavBar extends StatelessWidget {
                         : inActiveIconColor,
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, OrderScreen.routeName);
+                    if (MenuState.order != selectedMenu)
+                      Navigator.pushNamed(context, OrderScreen.routeName);
                   },
                 ),
               ),
@@ -76,7 +80,8 @@ class BottomNavBar extends StatelessWidget {
                         : inActiveIconColor,
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, NotificationScreen.routeName);
+                    if (MenuState.notification != selectedMenu)
+                      Navigator.pushNamed(context, NotificationScreen.routeName);
                   },
                 ),
               ),
@@ -90,7 +95,8 @@ class BottomNavBar extends StatelessWidget {
                           : inActiveIconColor,
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, ProfileScreen.routeName);
+                      if (MenuState.profile != selectedMenu)
+                        Navigator.pushNamed(context, ProfileScreen.routeName);
                     }),
               ),
             ],
