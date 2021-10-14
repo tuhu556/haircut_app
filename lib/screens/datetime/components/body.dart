@@ -22,6 +22,7 @@ class _BodyState extends State<Body> {
   DateTime? bookingDate;
   DateTime? startDate;
   double? totalPrice;
+  bool _expanded = false;
 
   List<Service> _selectedService = [];
   int pressedTime = 0;
@@ -133,32 +134,44 @@ class _BodyState extends State<Body> {
                           height: size.height * 0.05,
                         ),
                         Center(
-                          child: RoundedButton(
-                              text: "Your Services",
-                              press: () => showDialog<String>(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        AlertDialog(
-                                      title: const Text('AlertDialog Title'),
-                                      // content: ListView.builder(
-                                      //   itemCount: _selectedService.length,
-                                      //   itemBuilder:
-                                      //       (BuildContext context, int i) {
-                                      //         return ListView (_selectedService[i].serviceName);
-                                      //   },
-                                      // ),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context, 'OK'),
-                                          child: const Text('OK'),
-                                        ),
-                                      ],
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  AppColors.color3E3E3E),
+                            ),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(40)),
+                                    elevation: 16,
+                                    child: Container(
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: _selectedService.length,
+                                        itemBuilder: (context, index) {
+                                          return _buildRow(
+                                              'assets/images/logo.png',
+                                              _selectedService[index]
+                                                  .serviceName
+                                                  .toString(),
+                                              _selectedService[index]
+                                                  .price!
+                                                  .toDouble());
+                                        },
+                                      ),
                                     ),
-                                  ),
-                              color: Color(0xFF151515),
-                              textColor: Colors.white),
+                                  );
+                                },
+                              );
+                            },
+                            child: Text('Show your service List'),
+                          ),
                         ),
+
                         SizedBox(
                           height: size.height * 0.05,
                         ),
@@ -232,60 +245,37 @@ class _BodyState extends State<Body> {
     );
   }
 
-  Widget cardService(String? serviceID, String? serviceName, double? price,
-      int? durationTime) {
-    final currencyFormatter = NumberFormat.currency(locale: 'vi');
-    return Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 2,
-              blurRadius: 20,
-              offset: Offset(0, 1), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ListTile(
-              leading: Image.asset("assets/images/logo.png"),
-              // title: Container(
-              //   margin: EdgeInsets.only(bottom: 10),
-              //   child: Text(
-              //     serviceName,
-              //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-              //   ),
-              // ),
-              subtitle: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildRow(String imageAsset, String name, double price) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 12),
+          Container(height: 2, color: Colors.black),
+          SizedBox(height: 12),
+          Row(
+            children: <Widget>[
+              CircleAvatar(backgroundImage: AssetImage(imageAsset)),
+              SizedBox(width: 12),
+              Column(
                 children: [
-                  Text("Duration Time ${durationTime.toString()} min"),
+                  Text(name),
                   Container(
-                      margin: EdgeInsets.only(top: 5),
-                      child: Text(
-                        "${currencyFormatter.format(price)}",
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF4063c0)),
-                      ))
+                    decoration: BoxDecoration(
+                        color: AppColors.color3E3E3E,
+                        borderRadius: BorderRadius.circular(20)),
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 30),
+                    child: Text(
+                      '$price',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ],
-              ),
-              isThreeLine: false,
-            )
-          ],
-        )
-        /**/
-        );
+              )
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
