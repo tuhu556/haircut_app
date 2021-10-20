@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:haircut_app/components/rounded_button.dart';
 import 'package:haircut_app/constants/color.dart';
+import 'package:haircut_app/models/appointment.dart';
 import 'package:haircut_app/models/service.dart';
+import 'package:haircut_app/screens/cart/cart_screen.dart';
 import 'package:intl/intl.dart';
 
 class Body extends StatefulWidget {
@@ -15,27 +17,30 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  String curMonth = "";
-  String curYear = "";
+  // String curMonth = "";
+  // String curYear = "";
   String _d1 = "";
   String _t1 = "";
   DateTime? bookingDate;
-  DateTime? startDate;
+  DateTime? startTime;
   double? totalPrice;
   bool _expanded = false;
-
+  List<Appointment> _appointment = [];
   List<Service> _selectedService = [];
   int pressedTime = 0;
   void initState() {
     super.initState();
-    curMonth = DateFormat.MMMM().format(DateTime.now());
-    curYear = DateFormat.y().format(DateTime.now());
+    // curMonth = DateFormat.MMMM().format(DateTime.now());
+    // curYear = DateFormat.y().format(DateTime.now());
     didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map;
+    print("Date: $bookingDate");
+    print("Time: $startTime");
+
     if (args != null) {
       _selectedService = args["services"];
       print(_selectedService);
@@ -177,8 +182,13 @@ class _BodyState extends State<Body> {
                         ),
                         Center(
                           child: RoundedButton(
-                              text: "Book",
-                              press: () {},
+                              text: "Next",
+                              press: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  CartScreen.routeName,
+                                );
+                              },
                               color: Color(0xFF151515),
                               textColor: Colors.white),
                         ),
@@ -233,11 +243,13 @@ class _BodyState extends State<Body> {
           onDateChanged: (date) {
             setState(() {
               _d1 = DateFormat('dd MMM, yyyy').format(date);
+              bookingDate = date;
             });
           },
           onTimeChanged: (time) {
             setState(() {
               _t1 = DateFormat('H:mm').format(time);
+              startTime = time;
             });
           },
         )
@@ -279,3 +291,12 @@ class _BodyState extends State<Body> {
     );
   }
 }
+
+List<Appointment>? AddToAppointment(
+    String email,
+    DateTime bookingDate,
+    DateTime startTime,
+    int duration,
+    String note,
+    double totalPrice,
+    List<Service> services) {}

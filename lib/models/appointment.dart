@@ -6,7 +6,7 @@ class Appointment {
   DateTime? bookingDate;
   DateTime? startTime;
   int? totalDuration;
-  String? description;
+  String? note;
   double? totalPrice;
   bool? status;
   List<Service>? serives;
@@ -17,7 +17,7 @@ class Appointment {
     this.bookingDate,
     this.startTime,
     this.totalDuration,
-    this.description,
+    this.note,
     this.totalPrice,
     this.status,
     this.serives,

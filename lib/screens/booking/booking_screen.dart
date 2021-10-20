@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/screens/booking/components/body.dart';
-import 'package:haircut_app/screens/booking/components/body2.dart';
-import 'package:haircut_app/screens/datetime/datetime_screen.dart';
 
 class BookingScreen extends StatelessWidget {
   static String routeName = "/booking";

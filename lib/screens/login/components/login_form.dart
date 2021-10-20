@@ -12,7 +12,6 @@ import 'package:haircut_app/screens/home/home_screen.dart';
 import 'package:haircut_app/utils/api.dart';
 import 'package:http/http.dart' as http;
 
-
 class LoginForm extends StatefulWidget {
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -24,6 +23,7 @@ class _LoginFormState extends State<LoginForm> {
   late String password;
   bool? remember = false;
   bool isLoading = false;
+  bool _showPass = true;
   final List<String?> errors = [];
 
   void addError({String? error}) {
@@ -47,14 +47,14 @@ class _LoginFormState extends State<LoginForm> {
       Text(" Authenticating ... Please wait")
     ],
   );
-    
+
   Future _submit() async {
-    setState((){
+    setState(() {
       isLoading = true;
     });
     if (!_formKey.currentState!.validate()) {
       //invalid
-      setState((){
+      setState(() {
         isLoading = false;
       });
       return;
@@ -65,16 +65,15 @@ class _LoginFormState extends State<LoginForm> {
       'cusEmail': email,
       'password': password,
     };
-    final response = await http.post(url,
-      body: body
-    );
-    
+    final response = await http.post(url, body: body);
+
     print(response.statusCode);
     print(response.body);
     if (response.statusCode == 200) {
       Navigator.pushNamed(context, HomeScreen.routeName);
     } else if (response.statusCode == 208) {
-      Navigator.pushNamed(context, VerifyCodeScreen.routeName, arguments: {'email': email});
+      Navigator.pushNamed(context, VerifyCodeScreen.routeName,
+          arguments: {'email': email});
     } else {
       Flushbar(
         title: "Failed Login",
@@ -82,7 +81,7 @@ class _LoginFormState extends State<LoginForm> {
         duration: Duration(seconds: 3),
       ).show(context);
     }
-    setState((){
+    setState(() {
       isLoading = false;
     });
   }
@@ -133,15 +132,17 @@ class _LoginFormState extends State<LoginForm> {
           SizedBox(
             height: size.height * 0.05,
           ),
-          !isLoading ? new RoundedButton(
-              text: "Log in",
-              press: () {
-                _submit();
-              },
-              color: AppColors.color3E3E3E,
-              textColor: Colors.white) : Center(
-                      child: CircularProgressIndicator(),
-                    ),
+          !isLoading
+              ? new RoundedButton(
+                  text: "Log in",
+                  press: () {
+                    _submit();
+                  },
+                  color: AppColors.color3E3E3E,
+                  textColor: Colors.white)
+              : Center(
+                  child: CircularProgressIndicator(),
+                ),
         ],
       ),
     );
@@ -149,7 +150,7 @@ class _LoginFormState extends State<LoginForm> {
 
   TextFormField passwordForm() {
     return TextFormField(
-      obscureText: true,
+      obscureText: _showPass,
       onSaved: (newValue) => password = newValue ?? "",
       onChanged: (value) {
         if (value.isNotEmpty) {
@@ -176,8 +177,17 @@ class _LoginFormState extends State<LoginForm> {
         labelText: "Password",
         hintText: "Enter your Password",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Icon(
-          Icons.lock_outline,
+        suffixIcon: InkWell(
+          child: _showPass
+              ? Icon(
+                  Icons.visibility,
+                )
+              : Icon(Icons.visibility_off),
+          onTap: () {
+            setState(() {
+              _showPass = !_showPass;
+            });
+          },
         ),
       ),
     );

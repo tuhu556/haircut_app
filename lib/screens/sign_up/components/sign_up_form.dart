@@ -23,6 +23,7 @@ class _SignUpFormState extends State<SignUpForm> {
   late String confirmPassword;
   late String phoneNumber;
   bool isLoading = false;
+  bool _showPass = true;
   final List<String?> errors = [];
 
   void addError({String? error}) {
@@ -40,13 +41,13 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   Future _submit() async {
-    setState((){
+    setState(() {
       isLoading = true;
       errors.clear();
     });
     if (!_formKey.currentState!.validate()) {
       //invalid
-      setState((){
+      setState(() {
         isLoading = false;
       });
       return;
@@ -62,13 +63,12 @@ class _SignUpFormState extends State<SignUpForm> {
       'verifyCode': '123',
     };
     final response = await http.post(url,
-      headers: {"Content-Type": "application/json"},
-      body: json.encode(body)
-    );
-    
+        headers: {"Content-Type": "application/json"}, body: json.encode(body));
+
     print(response.statusCode);
     if (response.statusCode == 201) {
-      Navigator.pushNamed(context, VerifyCodeScreen.routeName, arguments: {'email': email});
+      Navigator.pushNamed(context, VerifyCodeScreen.routeName,
+          arguments: {'email': email});
     } else if (response.statusCode == 208) {
       addError(error: "Email existed");
       /* Flushbar(
@@ -77,7 +77,7 @@ class _SignUpFormState extends State<SignUpForm> {
         duration: Duration(seconds: 3),
       ).show(context); */
     }
-    setState((){
+    setState(() {
       isLoading = false;
     });
   }
@@ -113,13 +113,15 @@ class _SignUpFormState extends State<SignUpForm> {
           SizedBox(
             height: size.height * 0.03,
           ),
-          !isLoading ? RoundedButton(
-              text: "Sign up",
-              press: () {
-                _submit();
-              },
-              color: AppColors.color3E3E3E,
-              textColor: Colors.white) : Center(child: CircularProgressIndicator())
+          !isLoading
+              ? RoundedButton(
+                  text: "Sign up",
+                  press: () {
+                    _submit();
+                  },
+                  color: AppColors.color3E3E3E,
+                  textColor: Colors.white)
+              : Center(child: CircularProgressIndicator())
         ],
       ),
     );
@@ -161,7 +163,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
   TextFormField confirmPassFormForm() {
     return TextFormField(
-      obscureText: true,
+      obscureText: _showPass,
       onSaved: (newValue) => confirmPassword = newValue ?? "",
       onChanged: (value) {
         if (value.isNotEmpty) {
@@ -188,8 +190,17 @@ class _SignUpFormState extends State<SignUpForm> {
         labelText: "Confirm Password",
         hintText: "Re-enter your password",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Icon(
-          Icons.lock_outline,
+        suffixIcon: InkWell(
+          child: _showPass
+              ? Icon(
+                  Icons.visibility,
+                )
+              : Icon(Icons.visibility_off),
+          onTap: () {
+            setState(() {
+              _showPass = !_showPass;
+            });
+          },
         ),
       ),
     );
@@ -197,7 +208,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
   TextFormField passwordForm() {
     return TextFormField(
-      obscureText: true,
+      obscureText: _showPass,
       onSaved: (newValue) => password = newValue ?? "",
       onChanged: (value) {
         if (value.isNotEmpty) {
@@ -225,8 +236,17 @@ class _SignUpFormState extends State<SignUpForm> {
         labelText: "Password",
         hintText: "Enter your Password",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Icon(
-          Icons.lock_outline,
+        suffixIcon: InkWell(
+          child: _showPass
+              ? Icon(
+                  Icons.visibility,
+                )
+              : Icon(Icons.visibility_off),
+          onTap: () {
+            setState(() {
+              _showPass = !_showPass;
+            });
+          },
         ),
       ),
     );
