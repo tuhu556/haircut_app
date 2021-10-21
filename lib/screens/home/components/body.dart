@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:haircut_app/screens/booking/booking_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
-
+  void getCustomer() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    getCustomer();
     return SafeArea(
       child: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.only(
-                  top: 10.0, left: 30.0, right: 30.0, bottom: 7.0),
+              padding: EdgeInsets.only(top: 10.0, left: 30.0, right: 30.0, bottom: 7.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

@@ -6,11 +6,13 @@ import 'package:haircut_app/components/form_error.dart';
 import 'package:haircut_app/components/rounded_button.dart';
 import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/constants/validator.dart';
+import 'package:haircut_app/models/customer.dart';
 import 'package:haircut_app/screens/forgot_password/forgot_password_screen.dart';
 import 'package:haircut_app/screens/forgot_password/verify_code_screen.dart';
 import 'package:haircut_app/screens/home/home_screen.dart';
 import 'package:haircut_app/utils/api.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -69,7 +71,12 @@ class _LoginFormState extends State<LoginForm> {
 
     print(response.statusCode);
     print(response.body);
+
     if (response.statusCode == 200) {
+      Customer userData = Customer.formJson(json.decode(response.body));
+      var _save = json.encode(userData.toJson());
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("user_data", _save);
       Navigator.pushNamed(context, HomeScreen.routeName);
     } else if (response.statusCode == 208) {
       Navigator.pushNamed(context, VerifyCodeScreen.routeName,
