@@ -77,6 +77,7 @@ class _LoginFormState extends State<LoginForm> {
       var _save = json.encode(userData.toJson());
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString("user_data", _save);
+      prefs.setString("email", email);
       Navigator.pushNamed(context, HomeScreen.routeName);
     } else if (response.statusCode == 208) {
       Navigator.pushNamed(context, VerifyCodeScreen.routeName,

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:date_time_picker_widget/date_time_picker_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +10,7 @@ import 'package:haircut_app/models/appointment.dart';
 import 'package:haircut_app/models/service.dart';
 import 'package:haircut_app/screens/cart/cart_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -21,12 +24,13 @@ class _BodyState extends State<Body> {
   // String curYear = "";
   String _d1 = "";
   String _t1 = "";
-  DateTime? bookingDate;
-  DateTime? startTime;
-  double? totalPrice;
-  bool _expanded = false;
+
+  late DateTime bookingDate;
+  late DateTime startTime;
+  int totalDuration = 0;
+  double totalPrice = 0;
   List<Appointment> _appointment = [];
-  List<Service> _selectedService = [];
+  List<String> _serviceList = [];
   int pressedTime = 0;
   void initState() {
     super.initState();
@@ -37,17 +41,8 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Map;
-    print("Date: $bookingDate");
-    print("Time: $startTime");
-
-    if (args != null) {
-      _selectedService = args["services"];
-      print(_selectedService);
-      for (Service i in _selectedService) {
-        print(i.serviceName);
-      }
-    }
+    final _selectedService =
+        ModalRoute.of(context)!.settings.arguments as List<Service>;
     Size size = MediaQuery.of(context).size;
     return Theme(
       data: Theme.of(context).copyWith(
@@ -184,9 +179,25 @@ class _BodyState extends State<Body> {
                           child: RoundedButton(
                               text: "Next",
                               press: () {
+                                print("Date: $bookingDate");
+                                print("Time: $startTime");
+                                addListService(_serviceList, _selectedService);
+                                caculateTotalDuration(
+                                    totalDuration, _selectedService);
+                                caculateTotalPrice(
+                                    totalPrice, _selectedService);
+                                createAppoinment(
+                                    _appointment,
+                                    bookingDate,
+                                    startTime,
+                                    totalDuration,
+                                    totalPrice,
+                                    _selectedService,
+                                    _serviceList);
                                 Navigator.pushNamed(
                                   context,
                                   CartScreen.routeName,
+                                  arguments: _appointment,
                                 );
                               },
                               color: Color(0xFF151515),
@@ -292,11 +303,53 @@ class _BodyState extends State<Body> {
   }
 }
 
-List<Appointment>? AddToAppointment(
-    String email,
-    DateTime bookingDate,
-    DateTime startTime,
+Future<void> createAppoinment(
+    List<Appointment> appointment,
+    DateTime date,
+    DateTime time,
     int duration,
-    String note,
-    double totalPrice,
-    List<Service> services) {}
+    double price,
+    List<Service> selectedService,
+    List<String> serviceList) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? email = prefs.getString("email");
+  print(email);
+  final String status = "ON PROCCESS";
+  final String note = "";
+  String id = "";
+  appointment.add(
+    Appointment(
+        bookingID: id,
+        cusEmail: email,
+        bookingDate: date,
+        startTime: time,
+        totalDuration: duration,
+        status: status,
+        note: note,
+        serives: selectedService,
+        serivceID: serviceList),
+  );
+  print(email);
+  print("Appointment:" + appointment.length.toString());
+}
+
+void addListService(List<String?> serviceList, List<Service> selectedService) {
+  for (var item in selectedService) {
+    serviceList.add(item.serviceID);
+  }
+  print(serviceList.length);
+}
+
+void caculateTotalPrice(double totalPrice, List<Service> selectedService) {
+  for (var item in selectedService) {
+    totalPrice += item.price!;
+  }
+  print("TotalPrice: $totalPrice");
+}
+
+void caculateTotalDuration(int totalDuration, List<Service> selectedService) {
+  for (var item in selectedService) {
+    totalDuration += item.durationTime!;
+  }
+  print("totalDuration: $totalDuration");
+}

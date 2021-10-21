@@ -119,9 +119,7 @@ class _BodyState extends State<Body> {
                                 press: () {
                                   Navigator.pushNamed(
                                       context, DatetimeScreen.routeName,
-                                      arguments: {
-                                        "services": selectedServices
-                                      });
+                                      arguments: selectedServices);
                                 },
                                 color: Colors.black,
                                 textColor: Colors.white),

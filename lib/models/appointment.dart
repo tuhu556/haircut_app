@@ -8,8 +8,9 @@ class Appointment {
   int? totalDuration;
   String? note;
   double? totalPrice;
-  bool? status;
+  String? status;
   List<Service>? serives;
+  List<String>? serivceID;
 
   Appointment({
     this.bookingID,
@@ -21,5 +22,6 @@ class Appointment {
     this.totalPrice,
     this.status,
     this.serives,
+    this.serivceID,
   });
 }
