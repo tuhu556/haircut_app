@@ -193,14 +193,14 @@ class _BodyState extends State<Body> {
                                 totalDuration = caculateTotalDuration(
                                     totalDuration, _selectedService);
                                 _appointment = Appointment(
-                                    bookingID: id,
+                                    apptID: id,
                                     cusEmail: email,
-                                    bookingDate: bookingDate,
+                                    date: bookingDate,
                                     startTime: startTime,
                                     totalDuration: totalDuration,
                                     totalPrice: totalPrice,
                                     status: status,
-                                    note: note,
+                                    description: note,
                                     serives: _selectedService,
                                     serivceID: _serviceList);
 
@@ -328,13 +328,13 @@ Future<Appointment> createAppoinment(
   final String note = "";
   String id = "";
   appointment = Appointment(
-      bookingID: id,
+      apptID: id,
       cusEmail: email,
-      bookingDate: date,
+      date: date,
       startTime: time,
       totalDuration: duration,
       status: status,
-      note: note,
+      description: note,
       serives: selectedService,
       serivceID: serviceList);
   return appointment;

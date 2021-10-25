@@ -45,7 +45,7 @@ class _BookingViewsState extends State<BookingViews> {
   @override
   void initState() {
     email = widget.appointment.cusEmail;
-    bookingDate = widget.appointment.bookingDate;
+    bookingDate = widget.appointment.date;
     startTime = widget.appointment.startTime;
     totalDuration = widget.appointment.totalDuration;
     totalPrice = widget.appointment.totalPrice;

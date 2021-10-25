@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haircut_app/screens/profile/components/profile_menu.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
@@ -66,7 +67,11 @@ class Body extends StatelessWidget {
                       ProfileMenu(
                         text: "Log Out",
                         icon: "assets/icons/Log out.svg",
-                        press: () {},
+                        press: () async {
+                          SharedPreferences preferences = await SharedPreferences.getInstance();
+                          await preferences.clear();
+                          Navigator.popUntil(context, ModalRoute.withName('/login'));
+                        },
                       ),
                     ],
                   ),
