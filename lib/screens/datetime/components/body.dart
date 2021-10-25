@@ -24,12 +24,12 @@ class _BodyState extends State<Body> {
   // String curYear = "";
   String _d1 = "";
   String _t1 = "";
-
+  final currencyFormatter = NumberFormat.currency(locale: 'vi');
   late DateTime bookingDate;
   late DateTime startTime;
   int totalDuration = 0;
   double totalPrice = 0;
-  List<Appointment> _appointment = [];
+  Appointment _appointment = Appointment();
   List<String> _serviceList = [];
   int pressedTime = 0;
   void initState() {
@@ -178,22 +178,32 @@ class _BodyState extends State<Body> {
                         Center(
                           child: RoundedButton(
                               text: "Next",
-                              press: () {
+                              press: () async {
                                 print("Date: $bookingDate");
                                 print("Time: $startTime");
-                                addListService(_serviceList, _selectedService);
-                                caculateTotalDuration(
-                                    totalDuration, _selectedService);
-                                caculateTotalPrice(
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                final String status = "ON PROCCESS";
+                                final String note = "";
+                                String id = "";
+                                String? email = prefs.getString("email");
+                                totalPrice = caculateTotalPrice(
                                     totalPrice, _selectedService);
-                                createAppoinment(
-                                    _appointment,
-                                    bookingDate,
-                                    startTime,
-                                    totalDuration,
-                                    totalPrice,
-                                    _selectedService,
-                                    _serviceList);
+                                print("totalPrice" + totalPrice.toString());
+                                totalDuration = caculateTotalDuration(
+                                    totalDuration, _selectedService);
+                                _appointment = Appointment(
+                                    bookingID: id,
+                                    cusEmail: email,
+                                    bookingDate: bookingDate,
+                                    startTime: startTime,
+                                    totalDuration: totalDuration,
+                                    totalPrice: totalPrice,
+                                    status: status,
+                                    note: note,
+                                    serives: _selectedService,
+                                    serivceID: _serviceList);
+
                                 Navigator.pushNamed(
                                   context,
                                   CartScreen.routeName,
@@ -289,7 +299,7 @@ class _BodyState extends State<Body> {
                         borderRadius: BorderRadius.circular(20)),
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 30),
                     child: Text(
-                      '$price',
+                      '${currencyFormatter.format(price)}',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -303,8 +313,8 @@ class _BodyState extends State<Body> {
   }
 }
 
-Future<void> createAppoinment(
-    List<Appointment> appointment,
+Future<Appointment> createAppoinment(
+    Appointment appointment,
     DateTime date,
     DateTime time,
     int duration,
@@ -317,39 +327,40 @@ Future<void> createAppoinment(
   final String status = "ON PROCCESS";
   final String note = "";
   String id = "";
-  appointment.add(
-    Appointment(
-        bookingID: id,
-        cusEmail: email,
-        bookingDate: date,
-        startTime: time,
-        totalDuration: duration,
-        status: status,
-        note: note,
-        serives: selectedService,
-        serivceID: serviceList),
-  );
+  appointment = Appointment(
+      bookingID: id,
+      cusEmail: email,
+      bookingDate: date,
+      startTime: time,
+      totalDuration: duration,
+      status: status,
+      note: note,
+      serives: selectedService,
+      serivceID: serviceList);
+  return appointment;
   print(email);
-  print("Appointment:" + appointment.length.toString());
 }
 
-void addListService(List<String?> serviceList, List<Service> selectedService) {
-  for (var item in selectedService) {
-    serviceList.add(item.serviceID);
-  }
-  print(serviceList.length);
-}
+// void addListService(List<String?> serviceList, List<Service> selectedService) {
+//   for (var item in selectedService) {
+//     serviceList.add(item.serviceID);
+//   }
+//   return serviceList;
+//   print(serviceList.length);
+// }
 
-void caculateTotalPrice(double totalPrice, List<Service> selectedService) {
+double caculateTotalPrice(double totalPrice, List<Service> selectedService) {
   for (var item in selectedService) {
     totalPrice += item.price!;
   }
+  return totalPrice;
   print("TotalPrice: $totalPrice");
 }
 
-void caculateTotalDuration(int totalDuration, List<Service> selectedService) {
+int caculateTotalDuration(int totalDuration, List<Service> selectedService) {
   for (var item in selectedService) {
     totalDuration += item.durationTime!;
   }
+  return totalDuration;
   print("totalDuration: $totalDuration");
 }

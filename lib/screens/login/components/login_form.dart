@@ -78,6 +78,9 @@ class _LoginFormState extends State<LoginForm> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString("user_data", _save);
       prefs.setString("email", email);
+      prefs.setString("token", userData.token);
+      String? token = prefs.getString("token");
+      print(token);
       Navigator.pushNamed(context, HomeScreen.routeName);
     } else if (response.statusCode == 208) {
       Navigator.pushNamed(context, VerifyCodeScreen.routeName,

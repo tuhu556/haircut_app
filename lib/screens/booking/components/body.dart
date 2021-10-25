@@ -7,6 +7,7 @@ import 'package:haircut_app/models/service.dart';
 import 'package:haircut_app/screens/datetime/datetime_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -21,8 +22,24 @@ class _BodyState extends State<Body> {
   late Future<List<Service>> _getService;
 
   Future<List<Service>> getServices() async {
-    var response = await http
-        .get(Uri.parse('https://hair-cut.herokuapp.com/api/availableServices'));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString("token");
+    print("token:" + token.toString());
+    Map<String, String> requestHeaders = {'Authorization': '$token'};
+    var response = await http.get(
+        Uri.parse('https://hair-cut.herokuapp.com/api/availableServices'),
+        headers: requestHeaders
+        // headers: {
+        //   // 'Content-Type': 'application/json;charset=UTF-8',
+        //   // 'Charset': 'utf-8',
+        //   // "Access-Control-Allow-Origin": "*",
+
+        //   "Bearer": "$token"
+        // }
+        );
+
+    print(response.body);
+
     var jsonData = json.decode(response.body);
 
     for (var e in jsonData) {
@@ -83,6 +100,7 @@ class _BodyState extends State<Body> {
                           return Center(child: CircularProgressIndicator());
                         }
                         if (snapshot.hasError) {
+                          print(snapshot);
                           return Center(
                             child: Text('Error'),
                           );
