@@ -12,6 +12,7 @@ import 'package:haircut_app/screens/notification/notification_screen.dart';
 import 'package:haircut_app/screens/order/order_screen.dart';
 import 'package:haircut_app/screens/profile/profile_screen.dart';
 import 'package:haircut_app/screens/sign_up/sign_up_screen.dart';
+import 'package:haircut_app/screens/success_booking/success_booking_screen.dart';
 
 import 'screens/splash/splash_screen.dart';
 
@@ -30,4 +31,5 @@ final Map<String, WidgetBuilder> routes = {
   BookingScreen.routeName: (context) => BookingScreen(),
   DatetimeScreen.routeName: (context) => DatetimeScreen(),
   CartScreen.routeName: (context) => CartScreen(),
+  SuccessBookingScreen.routeName: (context) => SuccessBookingScreen(),
 };
