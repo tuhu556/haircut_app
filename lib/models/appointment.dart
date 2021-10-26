@@ -27,6 +27,10 @@ class Appointment {
   });
 
   factory Appointment.formJson(Map<String, dynamic> json) {
+    List<Service>? services = [];
+    for (var e in json['listService']) {
+      services.add(new Service.formJson(e));
+    }
     return Appointment(
       apptID: json['apptID'],
       cusEmail: json['cusEmail'],
@@ -36,7 +40,7 @@ class Appointment {
       description: json['description'],
       totalPrice: json['totalPrice'],
       status: json['status'],
-      serives: json['serives'],
+      serives: services,
       serivceID: json['serivceID']);
   }
 }

@@ -49,8 +49,6 @@ class _BodyState extends State<Body> {
       "status": "rejected",
     };
     var response = await http.put(url, headers: requestHeaders, body: body);
-    var jsonData = json.decode(response.body);
-
     if (response.statusCode == 200) {
       _pullRefresh();
     }
@@ -140,6 +138,113 @@ class _BodyState extends State<Body> {
     );
   }
 
+  void _showSheet(Appointment appointment, String dateString, String timeString) {
+    List<dynamic> listStatus = getTextStatus(appointment.status ?? "");
+    String statusText = listStatus[0] as String;
+    int statusColor = listStatus[1] as int;
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // set this to true
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return DraggableScrollableSheet(
+          maxChildSize: 0.9,
+          expand: false,
+          builder: (_, controller) {
+            return Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 5,),
+                  Center(child: Text("Detail Booking", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)),
+                  SizedBox(height: 2.5),
+                  RichText(
+                    text: TextSpan(
+                      text: 'Date: ',
+                      style: TextStyle(
+                          color: Color(0xff9E9E9E),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12),
+                      children: [
+                        TextSpan(
+                            text: '${dateString}',
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12)),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 2.5),
+                  RichText(
+                    text: TextSpan(
+                      text: 'Time: ',
+                      style: TextStyle(
+                          color: Color(0xff9E9E9E),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12),
+                      children: [
+                        TextSpan(
+                            text: '${timeString}',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12)),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 2.5),
+                  Expanded(
+                    child: ListView.builder(
+                      controller: controller,
+                      itemCount: appointment.serives?.length,
+                      itemBuilder: (BuildContext context, int i) {
+                        return Container(
+                          child: Text(appointment.serives?[i].serviceName ?? ""),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  List<dynamic> getTextStatus(String status) {
+    String statusText = "";
+    int statusColor = 0xff242424;
+    if (status == "ON PROCCESS") {
+      statusText = "Waiting accept";
+      statusColor = 0xff5cff92;
+    } else if (status == "accept") {
+      statusText = "Accepted";
+    } else if (status == "rejected") {
+      statusText = "Rejected";
+      statusColor = 0xffff5e5e;
+    } else if (status == "done") {
+      statusText = "R";
+      statusColor = 0xffff5e5e;
+    }
+    return [statusText, statusColor];
+  }
+
   Widget DetailBooking(Appointment appointment) {
     final dateFormatter = DateFormat('dd-MM-yyyy');
     final timeFormatter = DateFormat('HH:mm');
@@ -148,139 +253,133 @@ class _BodyState extends State<Body> {
         dateFormatter.format(appointment.startTime ?? DateTime.now());
     final timeString =
         timeFormatter.format(appointment.startTime ?? DateTime.now());
-    String statusText = "";
-    int statusColor = 0xff242424;
-    if (appointment.status == "ON PROCCESS") {
-      statusText = "Waiting accept";
-      statusColor = 0xff5cff92;
-    } else if (appointment.status == "accept") {
-      statusText = "Accepted";
-    } else if (appointment.status == "rejected") {
-      statusText = "Rejected";
-      statusColor = 0xffff5e5e;
-    } else if (appointment.status == "done") {
-      statusText = "R";
-      statusColor = 0xffff5e5e;
-    }
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    child: Image.asset(
-                      "assets/images/logo.png",
-                      width: 60,
-                    ),
-                    padding: const EdgeInsets.all(5),
-                    margin: const EdgeInsets.only(right: 10.0, bottom: 1.0),
-                    decoration: BoxDecoration(
-                      color: Color(0xffFFDFF2),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20.0),
+    List<dynamic> listStatus = getTextStatus(appointment.status ?? "");
+    String statusText = listStatus[0] as String;
+    int statusColor = listStatus[1] as int;
+    return GestureDetector(
+      onTap: () {
+        _showSheet(appointment, dateString, timeString);
+      },
+      child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Image.asset(
+                        "assets/images/logo.png",
+                        width: 60,
                       ),
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("AppointmentID",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              color: Color(0xff4B4B4B),
-                              fontSize: 16)),
-                      SizedBox(height: 5.5),
-                      RichText(
-                        text: TextSpan(
-                          text: 'Date: ',
-                          style: TextStyle(
-                              color: Color(0xff9E9E9E),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12),
-                          children: [
-                            TextSpan(
-                                text: '${dateString}',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12)),
-                          ],
+                      padding: const EdgeInsets.all(5),
+                      margin: const EdgeInsets.only(right: 10.0, bottom: 1.0),
+                      decoration: BoxDecoration(
+                        color: Color(0xffFFDFF2),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20.0),
                         ),
                       ),
-                      SizedBox(height: 2.5),
-                      RichText(
-                        text: TextSpan(
-                          text: 'Time: ',
-                          style: TextStyle(
-                              color: Color(0xff9E9E9E),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12),
-                          children: [
-                            TextSpan(
-                                text: '${timeString}',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12)),
-                          ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("AppointmentID",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                color: Color(0xff4B4B4B),
+                                fontSize: 16)),
+                        SizedBox(height: 5.5),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Date: ',
+                            style: TextStyle(
+                                color: Color(0xff9E9E9E),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12),
+                            children: [
+                              TextSpan(
+                                  text: '${dateString}',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12)),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              appointment.status == "ON PROCCESS"
-                  ? OutlinedButton(
-                      onPressed: () {
-                        cancelAppointment(appointment.apptID ?? "");
-                      },
-                      child: const Text('Cancel'),
-                    )
-                  : Container(),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text("${statusText}",
-                  style: TextStyle(
-                      color: Color(statusColor),
-                      fontWeight: FontWeight.w900,
-                      fontSize: 14)),
-              Text("${currencyFormatter.format(appointment.totalPrice)}",
-                  style: TextStyle(
-                      color: Color(0xffF88E79),
-                      fontWeight: FontWeight.w900,
-                      fontSize: 24))
-            ],
-          )
-        ],
-      ),
-      padding:
-          const EdgeInsets.only(top: 10.0, right: 15, bottom: 10, left: 15),
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(20.0),
+                        SizedBox(height: 2.5),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Time: ',
+                            style: TextStyle(
+                                color: Color(0xff9E9E9E),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12),
+                            children: [
+                              TextSpan(
+                                  text: '${timeString}',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12)),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                appointment.status == "ON PROCCESS"
+                    ? OutlinedButton(
+                        onPressed: () {
+                          cancelAppointment(appointment.apptID ?? "");
+                        },
+                        child: const Text('Cancel'),
+                      )
+                    : Container(),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text("${statusText}",
+                    style: TextStyle(
+                        color: Color(statusColor),
+                        fontWeight: FontWeight.w900,
+                        fontSize: 14)),
+                Text("${currencyFormatter.format(appointment.totalPrice)}",
+                    style: TextStyle(
+                        color: Color(0xffF88E79),
+                        fontWeight: FontWeight.w900,
+                        fontSize: 24))
+              ],
+            )
+          ],
         ),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              offset: Offset(0, 5),
-              blurRadius: 5.0,
-              spreadRadius: 0)
-        ],
+        padding:
+            const EdgeInsets.only(top: 10.0, right: 15, bottom: 10, left: 15),
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(20.0),
+          ),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                offset: Offset(0, 5),
+                blurRadius: 5.0,
+                spreadRadius: 0)
+          ],
+        ),
       ),
     );
   }
