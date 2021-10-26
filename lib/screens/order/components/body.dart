@@ -305,7 +305,7 @@ class _BodyState extends State<Body> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("AppointmentID",
+                        Text("AppointmentID: " + appointment.apptID.toString(),
                             style: TextStyle(
                                 fontWeight: FontWeight.w800,
                                 color: Color(0xff4B4B4B),
@@ -350,7 +350,8 @@ class _BodyState extends State<Body> {
                     ),
                   ],
                 ),
-                appointment.status == "ON PROCESS"
+                appointment.status == "ON PROCESS" ||
+                        appointment.status == "ACCEPT"
                     ? OutlinedButton(
                         onPressed: () {
                           cancelAppointment(appointment.apptID ?? "");

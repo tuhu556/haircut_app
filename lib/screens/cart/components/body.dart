@@ -279,16 +279,16 @@ class _BookingViewsState extends State<BookingViews> {
                                   Map<String, String> requestHeaders = {
                                     'Authorization': '$token'
                                   };
-                                  Map<String, dynamic> body = {
-                                    'cusEmail': email,
-                                    'date': bookingDate!.toIso8601String(),
-                                    'description': note,
-                                    'listService': _selectedServices,
-                                    'startTime': startTime!.toIso8601String(),
-                                    'status': status,
-                                    'totalDuration': totalDuration,
-                                    'totalPrice': totalPrice
-                                  };
+                                  // Map<String, dynamic> body = {
+                                  //   'cusEmail': email,
+                                  //   'date': bookingDate!.toIso8601String(),
+                                  //   'description': note,
+                                  //   'listService': _selectedServices,
+                                  //   'startTime': startTime!.toIso8601String(),
+                                  //   'status': status,
+                                  //   'totalDuration': totalDuration,
+                                  //   'totalPrice': totalPrice
+                                  // };
                                   final response = await http.post(url,
                                       body: jsonEncode(<String, dynamic>{
                                         'cusEmail': email,
@@ -297,7 +297,7 @@ class _BookingViewsState extends State<BookingViews> {
                                         'listService': _selectedServices,
                                         'startTime':
                                             startTime!.toIso8601String(),
-                                        'status': status,
+                                        'status': "ON PROCESS",
                                         'totalDuration': totalDuration,
                                         'totalPrice': totalPrice
                                       }),
