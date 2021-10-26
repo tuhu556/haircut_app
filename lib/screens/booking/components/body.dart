@@ -24,7 +24,6 @@ class _BodyState extends State<Body> {
   Future<List<Service>> getServices() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString("token");
-    print("token:" + token.toString());
     Map<String, String> requestHeaders = {'Authorization': '$token'};
     var response = await http.get(
         Uri.parse('https://hair-cut.herokuapp.com/api/availableServices'),

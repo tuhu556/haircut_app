@@ -27,10 +27,8 @@ class _BodyState extends State<Body> {
   final currencyFormatter = NumberFormat.currency(locale: 'vi');
   late DateTime bookingDate;
   late DateTime startTime;
-  int totalDuration = 0;
-  double totalPrice = 0;
+
   Appointment _appointment = Appointment();
-  List<String> _serviceList = [];
   int pressedTime = 0;
   void initState() {
     super.initState();
@@ -179,6 +177,10 @@ class _BodyState extends State<Body> {
                           child: RoundedButton(
                               text: "Next",
                               press: () async {
+                                int totalDuration = 0;
+                                double totalPrice = 0;
+                                List<String> _serviceList = [];
+
                                 print("Date: $bookingDate");
                                 print("Time: $startTime");
                                 SharedPreferences prefs =
@@ -189,7 +191,8 @@ class _BodyState extends State<Body> {
                                 String? email = prefs.getString("email");
                                 totalPrice = caculateTotalPrice(
                                     totalPrice, _selectedService);
-                                print("totalPrice" + totalPrice.toString());
+                                print("totalPrice: " + totalPrice.toString());
+                                print(_selectedService.length);
                                 totalDuration = caculateTotalDuration(
                                     totalDuration, _selectedService);
                                 _appointment = Appointment(
