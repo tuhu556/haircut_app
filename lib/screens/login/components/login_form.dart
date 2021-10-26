@@ -84,7 +84,7 @@ class _LoginFormState extends State<LoginForm> {
       Navigator.pushNamed(context, HomeScreen.routeName);
     } else if (response.statusCode == 208) {
       Navigator.pushNamed(context, VerifyCodeScreen.routeName,
-          arguments: {'email': email});
+          arguments: {'email': email, 'password': password});
     } else {
       Flushbar(
         title: "Failed Login",

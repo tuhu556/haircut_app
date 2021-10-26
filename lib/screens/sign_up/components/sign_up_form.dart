@@ -60,7 +60,7 @@ class _SignUpFormState extends State<SignUpForm> {
       'cusName': fullName,
       'phone': phoneNumber,
       'status': 'inactive',
-      'verifyCode': '123',
+      'verifyCode': '000',
     };
     final response = await http.post(url,
         headers: {"Content-Type": "application/json"}, body: json.encode(body));
@@ -68,7 +68,7 @@ class _SignUpFormState extends State<SignUpForm> {
     print(response.statusCode);
     if (response.statusCode == 201) {
       Navigator.pushNamed(context, VerifyCodeScreen.routeName,
-          arguments: {'email': email});
+          arguments: {'email': email, 'password': password});
     } else if (response.statusCode == 208) {
       addError(error: "Email existed");
       /* Flushbar(
@@ -76,6 +76,12 @@ class _SignUpFormState extends State<SignUpForm> {
         message: "Email existed",
         duration: Duration(seconds: 3),
       ).show(context); */
+    } else {
+      Flushbar(
+        title: "Error",
+        message: "Something is wrong, Please try again!",
+        duration: Duration(seconds: 3),
+      ).show(context);
     }
     setState(() {
       isLoading = false;

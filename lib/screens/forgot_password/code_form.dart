@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:haircut_app/components/form_error.dart';
 import 'package:haircut_app/components/rounded_button.dart';
 import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/constants/validator.dart';
+import 'package:haircut_app/models/customer.dart';
 import 'package:haircut_app/screens/forgot_password/change_password_screen.dart';
 import 'package:haircut_app/screens/home/home_screen.dart';
 import 'package:haircut_app/utils/api.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CodeForm extends StatefulWidget {
   @override
@@ -17,6 +21,7 @@ class _CodeFormState extends State<CodeForm> {
   final _formKey = GlobalKey<FormState>();
   late String code;
   late String email;
+  late String password;
   bool isLoading = false;
   final List<String?> errors = [];
 
@@ -35,24 +40,42 @@ class _CodeFormState extends State<CodeForm> {
   }
 
   Future _submit() async {
-    setState((){
+    setState(() {
       isLoading = true;
       errors.clear();
     });
     if (!_formKey.currentState!.validate()) {
       //invalid
-      setState((){
+      setState(() {
         isLoading = false;
       });
       return;
     }
-    
-    final url = Uri.parse('${Api.url}/checkCode?cusEmail=${email}&code=${code}');
+
+    final url =
+        Uri.parse('${Api.url}/checkCode?cusEmail=${email}&code=${code}');
     final response = await http.get(url);
-    
+
     print(response.statusCode);
+
     if (response.statusCode == 200) {
-      Navigator.pushNamed(context, HomeScreen.routeName);
+      final url2 = Uri.parse('${Api.url}/customerLogin');
+      Map<String, String> body = {
+        'cusEmail': email,
+        'password': password,
+      };
+      final response2 = await http.post(url2, body: body);
+      if (response2.statusCode == 200) {
+        Customer userData = Customer.formJson(json.decode(response2.body));
+        var _save = json.encode(userData.toJson());
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString("user_data", _save);
+        prefs.setString("email", email);
+        prefs.setString("token", userData.token);
+        String? token = prefs.getString("token");
+        print(token);
+        Navigator.pushNamed(context, HomeScreen.routeName);
+      }
     } else if (response.statusCode == 204) {
       addError(error: "Your code didn't mismatch");
       /* Flushbar(
@@ -61,7 +84,7 @@ class _CodeFormState extends State<CodeForm> {
         duration: Duration(seconds: 3),
       ).show(context); */
     }
-    setState((){
+    setState(() {
       isLoading = false;
     });
   }
@@ -69,7 +92,11 @@ class _CodeFormState extends State<CodeForm> {
   @override
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-    if (arguments != null) email = arguments['email'];
+    if (arguments != null) {
+      email = arguments['email'];
+      password = arguments['password'];
+    }
+
     //email = arguments["email"];
     Size size = MediaQuery.of(context).size;
     return Form(
