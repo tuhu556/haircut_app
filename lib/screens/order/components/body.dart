@@ -16,32 +16,58 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
 
-  List<Appointment> appointments = [];
+  
   late Future<List<Appointment>> _getAppointment;
 
   Future<List<Appointment>> getAppointment() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    appointments.clear();
+    List<Appointment> appointments = [];
     String? token = prefs.getString("token");
-    final url = Uri.parse('${Api.url}/appointment?cusEmail=${prefs.getString("email")}');
+    final url = Uri.parse('${Api.url}/appointmentCusEmail?cusEmail=${prefs.getString("email")}');
     Map<String, String> requestHeaders = {'Authorization': '$token'};
     var response = await http.get(
       url,
       headers: requestHeaders
     );
     var jsonData = json.decode(response.body);
-    //print(jsonData);
-    Appointment appointment = Appointment.formJson(jsonData);
-    appointments.add(appointment);
-    /* for (var e in jsonData) {
+
+    for (var e in jsonData) {
       Appointment appointment = Appointment.formJson(e);
       appointments.add(appointment);
-    }  */
-    /* Appointment appointment = Appointment.formJson(jsonData);
-    appointments.add(appointment); */
-    //appointments.add(new Appointment());
-    //print(appointments.length);
+    }
+    appointments.sort((a,b) {
+      var adate = a.startTime ?? DateTime.now();
+      var bdate = b.startTime ?? DateTime.now();
+      return bdate.compareTo(adate);
+    });
     return appointments;
+  }
+
+  void cancelAppointment(String apptID) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString("token");
+    final url = Uri.parse('${Api.url}/updateAppointmentStatus');
+    Map<String, String> requestHeaders = {'Authorization': '$token'};
+    final Map<String, dynamic> body = {
+      "apptID": apptID,
+      "status": "rejected",
+    };
+    var response = await http.put(
+      url,
+      headers: requestHeaders,
+      body: body
+    );
+    var jsonData = json.decode(response.body);
+    
+    if (response.statusCode == 200) {
+      _pullRefresh();
+    }
+  }
+
+  Future<void> _pullRefresh() async {
+    setState(() {
+      _getAppointment = getAppointment();
+    });
   }
 
   @override
@@ -126,20 +152,27 @@ class _BodyState extends State<Body> {
       ),
     );
   }
-
-  Future<void> _pullRefresh() async {
-    setState(() {
-      _getAppointment = getAppointment();
-    });
-    // why use freshWords var? https://stackoverflow.com/a/52992836/2301224
-  }
-
+  
   Widget DetailBooking(Appointment appointment) {
     final dateFormatter = DateFormat('dd-MM-yyyy');
     final timeFormatter = DateFormat('HH:mm');
     final currencyFormatter = NumberFormat.currency(locale: 'vi');
     final dateString = dateFormatter.format(appointment.startTime ?? DateTime.now());
     final timeString = timeFormatter.format(appointment.startTime ?? DateTime.now());
+    String statusText = "";
+    int statusColor = 0xff242424;
+    if (appointment.status == "ON PROCCESS") {
+      statusText = "Waiting accept";
+      statusColor = 0xff5cff92;
+    } else if (appointment.status == "accept") {
+      statusText = "Accepted";
+    } else if (appointment.status == "rejected") {
+      statusText = "Rejected";
+      statusColor = 0xffff5e5e;
+    } else if (appointment.status == "done") {
+      statusText = "R";
+      statusColor = 0xffff5e5e;
+    }
     return Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -193,9 +226,9 @@ class _BodyState extends State<Body> {
                         ),
                       ],
                     ),
-                    appointment.status == "waiting" ? OutlinedButton(
+                    appointment.status == "ON PROCCESS" ? OutlinedButton(
                       onPressed: () {
-                        print('Received click');
+                        cancelAppointment(appointment.apptID ?? "");
                       },
                       child: const Text('Cancel'),
                     ) : Container(),
@@ -205,13 +238,14 @@ class _BodyState extends State<Body> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text("Waiting accept", style: TextStyle(color: Color(0xff484848), fontWeight: FontWeight.w900, fontSize: 14)),
+                    Text("${statusText}", style: TextStyle(color: Color(statusColor), fontWeight: FontWeight.w900, fontSize: 14)),
                     Text("${currencyFormatter.format(appointment.totalPrice)}", style: TextStyle(color: Color(0xffF88E79), fontWeight: FontWeight.w900, fontSize: 24))
                   ],
                 )
               ],
             ),
             padding: const EdgeInsets.only(top: 10.0, right: 15, bottom: 10, left: 15),
+            margin: const EdgeInsets.symmetric(vertical: 8.0),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(
