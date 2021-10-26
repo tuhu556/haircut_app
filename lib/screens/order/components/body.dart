@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:haircut_app/models/appointment.dart';
 import 'package:haircut_app/utils/api.dart';
@@ -40,13 +39,14 @@ class _BodyState extends State<Body> {
   }
 
   void cancelAppointment(String apptID) async {
+    print("cancel");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString("token");
     final url = Uri.parse('${Api.url}/updateAppointmentStatus');
     Map<String, String> requestHeaders = {'Authorization': '$token'};
     final Map<String, dynamic> body = {
       "apptID": apptID,
-      "status": "rejected",
+      "status": "CANCEL BY CUSTOMER",
     };
     var response = await http.put(url, headers: requestHeaders, body: body);
     if (response.statusCode == 200) {
@@ -138,7 +138,8 @@ class _BodyState extends State<Body> {
     );
   }
 
-  void _showSheet(Appointment appointment, String dateString, String timeString) {
+  void _showSheet(
+      Appointment appointment, String dateString, String timeString) {
     List<dynamic> listStatus = getTextStatus(appointment.status ?? "");
     String statusText = listStatus[0] as String;
     int statusColor = listStatus[1] as int;
@@ -156,8 +157,14 @@ class _BodyState extends State<Body> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 5,),
-                  Center(child: Text("Detail Booking", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Center(
+                      child: Text(
+                    "Detail Booking",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  )),
                   SizedBox(height: 2.5),
                   RichText(
                     text: TextSpan(
@@ -169,7 +176,10 @@ class _BodyState extends State<Body> {
                       children: [
                         TextSpan(
                             text: '${dateString}',
-                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12)),
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12)),
                       ],
                     ),
                   ),
@@ -198,7 +208,8 @@ class _BodyState extends State<Body> {
                       itemCount: appointment.serives?.length,
                       itemBuilder: (BuildContext context, int i) {
                         return Container(
-                          child: Text(appointment.serives?[i].serviceName ?? ""),
+                          child:
+                              Text(appointment.serives?[i].serviceName ?? ""),
                         );
                       },
                     ),
@@ -230,16 +241,19 @@ class _BodyState extends State<Body> {
   List<dynamic> getTextStatus(String status) {
     String statusText = "";
     int statusColor = 0xff242424;
-    if (status == "ON PROCCESS") {
+    if (status == "ON PROCESS") {
       statusText = "Waiting accept";
       statusColor = 0xff5cff92;
-    } else if (status == "accept") {
+    } else if (status == "ACCEPT") {
       statusText = "Accepted";
-    } else if (status == "rejected") {
+    } else if (status == "CANCEL BY ADMIN") {
       statusText = "Rejected";
       statusColor = 0xffff5e5e;
-    } else if (status == "done") {
-      statusText = "R";
+    } else if (status == "CANCEL BY CUSTOMER") {
+      statusText = "Cancel";
+      statusColor = 0xffff5e5e;
+    } else if (status == "DONE") {
+      statusText = "Done";
       statusColor = 0xffff5e5e;
     }
     return [statusText, statusColor];
@@ -336,7 +350,7 @@ class _BodyState extends State<Body> {
                     ),
                   ],
                 ),
-                appointment.status == "ON PROCCESS"
+                appointment.status == "ON PROCESS"
                     ? OutlinedButton(
                         onPressed: () {
                           cancelAppointment(appointment.apptID ?? "");
