@@ -22,7 +22,10 @@ class _BodyState extends State<Body> {
     String? token = prefs.getString("token");
     final url = Uri.parse(
         '${Api.url}/appointmentCusEmail?cusEmail=${prefs.getString("email")}');
-    Map<String, String> requestHeaders = {'Authorization': '$token', "Accept": "application/json; charset=UTF-8"};
+    Map<String, String> requestHeaders = {
+      'Authorization': '$token',
+      "Accept": "application/json; charset=UTF-8"
+    };
     var response = await http.get(url, headers: requestHeaders);
     var jsonData = json.decode(response.body);
 
@@ -110,13 +113,12 @@ class _BodyState extends State<Body> {
                         );
                       } else
                         return ListView.builder(
-                          //shrinkWrap: true,
-                          itemCount: snapshot.data?.length,
-                          //primary: false,
-                          itemBuilder: (BuildContext context, int i) {
-                            return DetailBooking(snapshot.data[i]);
-                          }
-                        );
+                            //shrinkWrap: true,
+                            itemCount: snapshot.data?.length,
+                            //primary: false,
+                            itemBuilder: (BuildContext context, int i) {
+                              return DetailBooking(snapshot.data[i]);
+                            });
                     },
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 15),
@@ -171,32 +173,36 @@ class _BodyState extends State<Body> {
                           Container(
                             child: Text(
                               "Detail Booking",
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             margin: const EdgeInsets.only(left: 20),
                           ),
                           Container(
                             child: Text(
                               "${statusText}",
-                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(statusColor)),
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(statusColor)),
                             ),
                             margin: const EdgeInsets.only(left: 20),
                           ),
                         ],
                       ),
                       appointment.status == "ON PROCESS" ||
-                        appointment.status == "ACCEPT"
-                      ? Container(
-                        margin: const EdgeInsets.only(right: 20),
-                        child: OutlinedButton(
-                            onPressed: () {
-                              cancelAppointment(appointment.apptID ?? "");
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Cancel'),
-                          ),
-                      )
-                      : Container(),
+                              appointment.status == "ACCEPT"
+                          ? Container(
+                              margin: const EdgeInsets.only(right: 20),
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  cancelAppointment(appointment.apptID ?? "");
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                            )
+                          : Container(),
                     ],
                   ),
                   SizedBox(height: 2.5),
@@ -284,7 +290,8 @@ class _BodyState extends State<Body> {
                                     fontSize: 12),
                                 children: [
                                   TextSpan(
-                                      text: "${appointment.totalDuration} minutes",
+                                      text:
+                                          "${appointment.totalDuration} minutes",
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
@@ -292,24 +299,28 @@ class _BodyState extends State<Body> {
                                 ],
                               ),
                             ),
-                            appointment.description != "" ? SizedBox(height: 2.5) : Container(),
-                            appointment.description != "" ? RichText(
-                              text: TextSpan(
-                                text: "Description: ",
-                                style: TextStyle(
-                                    color: Color(0xff9E9E9E),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12),
-                                children: [
-                                  TextSpan(
-                                      text: "${appointment.description}",
+                            appointment.description != ""
+                                ? SizedBox(height: 2.5)
+                                : Container(),
+                            appointment.description != ""
+                                ? RichText(
+                                    text: TextSpan(
+                                      text: "Description: ",
                                       style: TextStyle(
-                                          color: Colors.black,
+                                          color: Color(0xff9E9E9E),
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 12)),
-                                ],
-                              ),
-                            ) : Container(),
+                                          fontSize: 12),
+                                      children: [
+                                        TextSpan(
+                                            text: "${appointment.description}",
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 12)),
+                                      ],
+                                    ),
+                                  )
+                                : Container(),
                             SizedBox(height: 2.5),
                             RichText(
                               text: TextSpan(
@@ -320,7 +331,8 @@ class _BodyState extends State<Body> {
                                     fontSize: 12),
                                 children: [
                                   TextSpan(
-                                      text: "${currencyFormatter.format(appointment.totalPrice)}",
+                                      text:
+                                          "${currencyFormatter.format(appointment.totalPrice)}",
                                       style: TextStyle(
                                           color: Color(0xFF66ADFF),
                                           fontWeight: FontWeight.bold,
@@ -333,7 +345,8 @@ class _BodyState extends State<Body> {
                       ],
                     ),
                     margin: const EdgeInsets.symmetric(vertical: 10),
-                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 20),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -342,7 +355,8 @@ class _BodyState extends State<Body> {
                   Container(
                     child: Text(
                       "Services",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     margin: const EdgeInsets.only(top: 20, left: 20),
                   ),
@@ -374,9 +388,15 @@ class _BodyState extends State<Body> {
                                   ),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text("${appointment.serives?[i].serviceName}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+                                      Text(
+                                        "${appointment.serives?[i].serviceName}",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                       SizedBox(height: 3.5),
                                       RichText(
                                         text: TextSpan(
@@ -387,7 +407,8 @@ class _BodyState extends State<Body> {
                                               fontSize: 10),
                                           children: [
                                             TextSpan(
-                                                text: "${appointment.serives?[i].durationTime} minutes",
+                                                text:
+                                                    "${appointment.serives?[i].durationTime} minutes",
                                                 style: TextStyle(
                                                     color: Color(0xFF999999),
                                                     fontWeight: FontWeight.bold,
@@ -399,11 +420,16 @@ class _BodyState extends State<Body> {
                                   ),
                                 ],
                               ),
-                              Text("${currencyFormatter.format(appointment.serives?[i].price)}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))
+                              Text(
+                                  "${currencyFormatter.format(appointment.serives?[i].price)}",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold))
                             ],
                           ),
                           margin: const EdgeInsets.symmetric(vertical: 10),
-                          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 20),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -503,7 +529,7 @@ class _BodyState extends State<Body> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("AppointmentID: " + appointment.apptID.toString(),
+                        Text("ID : " + appointment.apptID.toString(),
                             style: TextStyle(
                                 fontWeight: FontWeight.w800,
                                 color: Color(0xff4B4B4B),

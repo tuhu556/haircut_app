@@ -261,6 +261,7 @@ class _BookingViewsState extends State<BookingViews> {
                         SizedBox(
                           height: size.height * 0.1,
                         ),
+
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Container(
