@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:haircut_app/models/appointment.dart';
+import 'package:haircut_app/models/feedback.dart' as feedbackModel;
 import 'package:haircut_app/utils/api.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -31,6 +32,11 @@ class _BodyState extends State<Body> {
 
     for (var e in jsonData) {
       Appointment appointment = Appointment.formJson(e);
+      final urlFeedback = Uri.parse('${Api.url}/feedbackApptID?apptID=${appointment.apptID}');
+      var responseFeedback = await http.get(urlFeedback, headers: requestHeaders);
+      if (responseFeedback.body.isNotEmpty) {
+        appointment.feedback = feedbackModel.Feedback.formJson(json.decode(responseFeedback.body));
+      }
       appointments.add(appointment);
     }
     appointments.sort((a, b) {
@@ -107,7 +113,7 @@ class _BodyState extends State<Body> {
                         return Center(child: CircularProgressIndicator());
                       }
                       if (snapshot.hasError) {
-                        //print(snapshot.error);
+                        print(snapshot.error);
                         return Center(
                           child: Text('Error'),
                         );

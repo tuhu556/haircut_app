@@ -1,3 +1,4 @@
+import 'package:haircut_app/models/feedback.dart';
 import 'package:haircut_app/models/service.dart';
 import 'package:intl/intl.dart';
 
@@ -12,6 +13,7 @@ class Appointment {
   String? status;
   List<Service>? serives;
   List<String>? serivceID;
+  Feedback? feedback;
 
   Appointment({
     this.apptID,
@@ -24,6 +26,7 @@ class Appointment {
     this.status,
     this.serives,
     this.serivceID,
+    this.feedback,
   });
 
   factory Appointment.formJson(Map<String, dynamic> json) {
