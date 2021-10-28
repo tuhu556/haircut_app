@@ -3,7 +3,10 @@ import 'package:haircut_app/components/form_error.dart';
 import 'package:haircut_app/components/rounded_button.dart';
 import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/constants/validator.dart';
+import 'package:haircut_app/screens/forgot_password/verify_code_forgot_pass_screen.dart';
 import 'package:haircut_app/screens/forgot_password/verify_code_screen.dart';
+import 'package:haircut_app/utils/api.dart';
+import 'package:http/http.dart' as http;
 
 class EmailForm extends StatefulWidget {
   @override
@@ -12,7 +15,7 @@ class EmailForm extends StatefulWidget {
 
 class _EmailFormState extends State<EmailForm> {
   final _formKey = GlobalKey<FormState>();
-  String? email;
+  late String email;
   final List<String?> errors = [];
 
   void addError({String? error}) {
@@ -46,13 +49,25 @@ class _EmailFormState extends State<EmailForm> {
           ),
           RoundedButton(
               text: "Next",
-              press: () {
+              press: () async {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-                  Navigator.pushNamed(
-                    context,
-                    VerifyCodeScreen.routeName,
-                  );
+                  final url = Uri.parse('${Api.url}/sendEmail');
+                  Map<String, String> body = {
+                    'cusEmail': email,
+                  };
+                  final response = await http.post(url, body: body);
+                  if (response.statusCode == 201) {
+                    Navigator.pushNamed(
+                      context,
+                      VerifyCodeForgotPassScreen.routeName,
+                      arguments: {
+                        'email': email,
+                      },
+                    );
+                  } else if (response.statusCode == 404) {
+                    addError(error: kNotFoundEmailError);
+                  }
                 }
               },
               color: AppColors.color3E3E3E,
@@ -65,7 +80,7 @@ class _EmailFormState extends State<EmailForm> {
   TextFormField emailForm() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => email = newValue,
+      onSaved: (newValue) => email = newValue ?? "",
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kEmailNullError);

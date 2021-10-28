@@ -276,20 +276,6 @@ class _BookingViewsState extends State<BookingViews> {
                                   print(token);
                                   final url =
                                       Uri.parse('${Api.url}/createAppointment');
-
-                                  Map<String, String> requestHeaders = {
-                                    'Authorization': '$token'
-                                  };
-                                  // Map<String, dynamic> body = {
-                                  //   'cusEmail': email,
-                                  //   'date': bookingDate!.toIso8601String(),
-                                  //   'description': note,
-                                  //   'listService': _selectedServices,
-                                  //   'startTime': startTime!.toIso8601String(),
-                                  //   'status': status,
-                                  //   'totalDuration': totalDuration,
-                                  //   'totalPrice': totalPrice
-                                  // };
                                   final response = await http.post(url,
                                       body: jsonEncode(<String, dynamic>{
                                         'cusEmail': email,

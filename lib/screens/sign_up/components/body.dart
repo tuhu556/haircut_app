@@ -35,7 +35,7 @@ class Body extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Image.asset(
                         "assets/images/logo.png",
-                        height: size.height * 0.20,
+                        height: size.height * 0.10,
                         width: size.width * 0.55,
                       ),
                     )
