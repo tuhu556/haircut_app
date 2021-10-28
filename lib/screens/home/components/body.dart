@@ -24,11 +24,11 @@ class _BodyState extends State<Body> {
       setState(() {});
     }); */
     messaging = FirebaseMessaging.instance;
+    messaging.subscribeToTopic("all");
     messaging.getToken().then((token){
       assert(token != null);
       print('Token FCM : $token');
     });
-
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
         print("message recieved");
         print(event.notification!.body);
