@@ -311,7 +311,7 @@ class _BodyState extends State<Body> {
                             appointment.description != ""
                                 ? RichText(
                                     text: TextSpan(
-                                      text: "Description: ",
+                                      text: "Note: ",
                                       style: TextStyle(
                                           color: Color(0xff9E9E9E),
                                           fontWeight: FontWeight.bold,
@@ -472,19 +472,20 @@ class _BodyState extends State<Body> {
     String statusText = "";
     int statusColor = 0xff242424;
     if (status == "ON PROCESS") {
-      statusText = "Waiting accept";
-      statusColor = 0xff5cff92;
+      statusText = "WAITING";
+      statusColor = 0xfffcbe03;
     } else if (status == "ACCEPT") {
-      statusText = "Accepted";
+      statusText = "ACCEPTED";
+      statusColor = 0xff5cff92;
     } else if (status == "CANCEL BY ADMIN") {
-      statusText = "Rejected";
+      statusText = "REJECTED";
       statusColor = 0xffff5e5e;
     } else if (status == "CANCEL BY CUSTOMER") {
-      statusText = "Cancel";
+      statusText = "CANCEL";
       statusColor = 0xffff5e5e;
     } else if (status == "DONE") {
-      statusText = "Done";
-      statusColor = 0xffff5e5e;
+      statusText = "DONE";
+      statusColor = 0xffcf03fc;
     }
     return [statusText, statusColor];
   }
@@ -587,6 +588,15 @@ class _BodyState extends State<Body> {
                           cancelAppointment(appointment.apptID ?? "");
                         },
                         child: const Text('Cancel'),
+                      )
+                    : Container(),
+                appointment.status == "DONE"
+                    ? OutlinedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, RatingScreen.routeName,
+                              arguments: {"apptID": appointment.apptID});
+                        },
+                        child: const Text('Rating'),
                       )
                     : Container(),
               ],
