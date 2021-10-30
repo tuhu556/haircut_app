@@ -111,7 +111,7 @@ class _CodeForgotPassFormState extends State<CodeForgotPassForm> {
 
   TextFormField codeForm() {
     return TextFormField(
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: TextInputType.number,
       onSaved: (newValue) => code = newValue ?? "",
       onChanged: (value) {
         if (value.isNotEmpty) {

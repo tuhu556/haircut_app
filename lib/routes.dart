@@ -4,6 +4,7 @@ import 'package:haircut_app/screens/cart/cart_screen.dart';
 import 'package:haircut_app/screens/datetime/datetime_screen.dart';
 import 'package:haircut_app/screens/first/firs_screen.dart';
 import 'package:haircut_app/screens/forgot_password/change_password_screen.dart';
+import 'package:haircut_app/screens/forgot_password/code_screen.dart';
 import 'package:haircut_app/screens/forgot_password/forgot_password_screen.dart';
 import 'package:haircut_app/screens/forgot_password/password_success_screen.dart';
 import 'package:haircut_app/screens/forgot_password/verify_code_forgot_pass_screen.dart';
@@ -41,4 +42,5 @@ final Map<String, WidgetBuilder> routes = {
       VerifyCodeForgotPassScreen(),
   RatingScreen.routeName: (context) => RatingScreen(),
   ThanksScreen.routeName: (context) => ThanksScreen(),
+  PinCodeVerificationScreen.routeName: (context) => PinCodeVerificationScreen(),
 };
