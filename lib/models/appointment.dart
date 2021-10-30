@@ -7,6 +7,7 @@ class Appointment {
   String? cusEmail;
   DateTime? date;
   DateTime? startTime;
+  DateTime? createDate;
   int? totalDuration;
   String? description;
   double? totalPrice;
@@ -19,6 +20,7 @@ class Appointment {
     this.apptID,
     this.cusEmail,
     this.date,
+    this.createDate,
     this.startTime,
     this.totalDuration,
     this.description,
@@ -37,6 +39,7 @@ class Appointment {
     return Appointment(
       apptID: json['apptID'],
       cusEmail: json['cusEmail'],
+      createDate: DateTime.parse(json['createDate']), //new DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(json['date']), //json['date'],
       date: DateTime.parse(json['date']), //new DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(json['date']), //json['date'],
       startTime: DateTime.parse(json['startTime']), //new DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(json['startTime']),
       totalDuration: json['totalDuration'],
