@@ -145,330 +145,6 @@ class _BodyState extends State<Body> {
     );
   }
 
-  void _showSheet(
-      Appointment appointment, String dateString, String timeString) {
-    List<dynamic> listStatus = getTextStatus(appointment.status ?? "");
-    final currencyFormatter = NumberFormat.currency(locale: 'vi');
-    String statusText = listStatus[0] as String;
-    int statusColor = listStatus[1] as int;
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true, // set this to true
-      backgroundColor: Colors.transparent,
-      builder: (_) {
-        return DraggableScrollableSheet(
-          maxChildSize: 0.9,
-          //initialChildSize: 0.4,
-          expand: false,
-          builder: (_, controller) {
-            return Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            child: Text(
-                              "Detail Booking",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            margin: const EdgeInsets.only(left: 20),
-                          ),
-                          Container(
-                            child: Text(
-                              "${statusText}",
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(statusColor)),
-                            ),
-                            margin: const EdgeInsets.only(left: 20),
-                          ),
-                        ],
-                      ),
-                      appointment.status == "ON PROCESS" ||
-                              appointment.status == "ACCEPT"
-                          ? Container(
-                              margin: const EdgeInsets.only(right: 20),
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  cancelAppointment(appointment.apptID ?? "");
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Cancel'),
-                              ),
-                            )
-                          : Container(),
-                    ],
-                  ),
-                  SizedBox(height: 2.5),
-                  Container(
-                    child: Row(
-                      children: [
-                        Container(
-                          child: Image.asset(
-                            "assets/images/deadline.png",
-                            width: 30,
-                          ),
-                          padding: const EdgeInsets.all(10),
-                          margin: const EdgeInsets.only(right: 10.0),
-                          decoration: BoxDecoration(
-                            color: Color(0xffCFF4FF),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20.0),
-                            ),
-                          ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                text: 'Appointment ID: ',
-                                style: TextStyle(
-                                    color: Color(0xff9E9E9E),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12),
-                                children: [
-                                  TextSpan(
-                                      text: '${appointment.apptID}',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12)),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 2.5),
-                            RichText(
-                              text: TextSpan(
-                                text: 'Date: ',
-                                style: TextStyle(
-                                    color: Color(0xff9E9E9E),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12),
-                                children: [
-                                  TextSpan(
-                                      text: '${dateString}',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12)),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 2.5),
-                            RichText(
-                              text: TextSpan(
-                                text: 'Time: ',
-                                style: TextStyle(
-                                    color: Color(0xff9E9E9E),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12),
-                                children: [
-                                  TextSpan(
-                                      text: '${timeString}',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12)),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 2.5),
-                            RichText(
-                              text: TextSpan(
-                                text: "Total Duration Time: ",
-                                style: TextStyle(
-                                    color: Color(0xff9E9E9E),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12),
-                                children: [
-                                  TextSpan(
-                                      text:
-                                          "${appointment.totalDuration} minutes",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12)),
-                                ],
-                              ),
-                            ),
-                            appointment.description != ""
-                                ? SizedBox(height: 2.5)
-                                : Container(),
-                            appointment.description != ""
-                                ? RichText(
-                                    text: TextSpan(
-                                      text: "Note: ",
-                                      style: TextStyle(
-                                          color: Color(0xff9E9E9E),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12),
-                                      children: [
-                                        TextSpan(
-                                            text: "${appointment.description}",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12)),
-                                      ],
-                                    ),
-                                  )
-                                : Container(),
-                            SizedBox(height: 2.5),
-                            RichText(
-                              text: TextSpan(
-                                text: "Total Price: ",
-                                style: TextStyle(
-                                    color: Color(0xff9E9E9E),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12),
-                                children: [
-                                  TextSpan(
-                                      text:
-                                          "${currencyFormatter.format(appointment.totalPrice)}",
-                                      style: TextStyle(
-                                          color: Color(0xFF66ADFF),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14)),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 20),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                  ),
-                  Container(
-                    child: Text(
-                      "Services",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    margin: const EdgeInsets.only(top: 20, left: 20),
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      controller: controller,
-                      itemCount: appointment.serives?.length,
-                      itemBuilder: (BuildContext context, int i) {
-                        return Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    child: Image.asset(
-                                      "assets/images/keoluoc.png",
-                                      width: 30,
-                                    ),
-                                    padding: const EdgeInsets.all(10),
-                                    margin: const EdgeInsets.only(right: 10.0),
-                                    decoration: BoxDecoration(
-                                      color: Color(0xffF2F5FF),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(20.0),
-                                      ),
-                                    ),
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "${appointment.serives?[i].serviceName}",
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      SizedBox(height: 3.5),
-                                      RichText(
-                                        text: TextSpan(
-                                          text: 'Duration Time: ',
-                                          style: TextStyle(
-                                              color: Color(0xFF999999),
-                                              //fontWeight: FontWeight.bold,
-                                              fontSize: 10),
-                                          children: [
-                                            TextSpan(
-                                                text:
-                                                    "${appointment.serives?[i].durationTime} minutes",
-                                                style: TextStyle(
-                                                    color: Color(0xFF999999),
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 10)),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                  "${currencyFormatter.format(appointment.serives?[i].price)}",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold))
-                            ],
-                          ),
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 20),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              decoration: BoxDecoration(
-                color: Color(0xFFF3F3F3),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 7,
-                    offset: Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
   List<dynamic> getTextStatus(String status) {
     String statusText = "";
     int statusColor = 0xff242424;
@@ -504,7 +180,7 @@ class _BodyState extends State<Body> {
     int statusColor = listStatus[1] as int;
     return GestureDetector(
       onTap: () {
-        _showSheet(appointment, dateString, timeString);
+        showSheet(context, appointment, dateString, timeString);
       },
       child: Container(
         child: Column(
@@ -639,4 +315,328 @@ class _BodyState extends State<Body> {
       ),
     );
   }
+}
+
+void showSheet(BuildContext context, Appointment appointment, String dateString, String timeString) {
+  _BodyState body = new _BodyState();
+  List<dynamic> listStatus = body.getTextStatus(appointment.status ?? "");
+  final currencyFormatter = NumberFormat.currency(locale: 'vi');
+  String statusText = listStatus[0] as String;
+  int statusColor = listStatus[1] as int;
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true, // set this to true
+    backgroundColor: Colors.transparent,
+    builder: (_) {
+      return DraggableScrollableSheet(
+        maxChildSize: 0.9,
+        //initialChildSize: 0.4,
+        expand: false,
+        builder: (_, controller) {
+          return Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Text(
+                            "Detail Booking",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          margin: const EdgeInsets.only(left: 20),
+                        ),
+                        Container(
+                          child: Text(
+                            "${statusText}",
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Color(statusColor)),
+                          ),
+                          margin: const EdgeInsets.only(left: 20),
+                        ),
+                      ],
+                    ),
+                    appointment.status == "ON PROCESS" ||
+                            appointment.status == "ACCEPT"
+                        ? Container(
+                            margin: const EdgeInsets.only(right: 20),
+                            child: OutlinedButton(
+                              onPressed: () {
+                                body.cancelAppointment(appointment.apptID ?? "");
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Cancel'),
+                            ),
+                          )
+                        : Container(),
+                  ],
+                ),
+                SizedBox(height: 2.5),
+                Container(
+                  child: Row(
+                    children: [
+                      Container(
+                        child: Image.asset(
+                          "assets/images/deadline.png",
+                          width: 30,
+                        ),
+                        padding: const EdgeInsets.all(10),
+                        margin: const EdgeInsets.only(right: 10.0),
+                        decoration: BoxDecoration(
+                          color: Color(0xffCFF4FF),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20.0),
+                          ),
+                        ),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: 'Appointment ID: ',
+                              style: TextStyle(
+                                  color: Color(0xff9E9E9E),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12),
+                              children: [
+                                TextSpan(
+                                    text: '${appointment.apptID}',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12)),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 2.5),
+                          RichText(
+                            text: TextSpan(
+                              text: 'Date: ',
+                              style: TextStyle(
+                                  color: Color(0xff9E9E9E),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12),
+                              children: [
+                                TextSpan(
+                                    text: '${dateString}',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12)),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 2.5),
+                          RichText(
+                            text: TextSpan(
+                              text: 'Time: ',
+                              style: TextStyle(
+                                  color: Color(0xff9E9E9E),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12),
+                              children: [
+                                TextSpan(
+                                    text: '${timeString}',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12)),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 2.5),
+                          RichText(
+                            text: TextSpan(
+                              text: "Total Duration Time: ",
+                              style: TextStyle(
+                                  color: Color(0xff9E9E9E),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12),
+                              children: [
+                                TextSpan(
+                                    text:
+                                        "${appointment.totalDuration} minutes",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12)),
+                              ],
+                            ),
+                          ),
+                          appointment.description != ""
+                              ? SizedBox(height: 2.5)
+                              : Container(),
+                          appointment.description != ""
+                              ? RichText(
+                                  text: TextSpan(
+                                    text: "Note: ",
+                                    style: TextStyle(
+                                        color: Color(0xff9E9E9E),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12),
+                                    children: [
+                                      TextSpan(
+                                          text: "${appointment.description}",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12)),
+                                    ],
+                                  ),
+                                )
+                              : Container(),
+                          SizedBox(height: 2.5),
+                          RichText(
+                            text: TextSpan(
+                              text: "Total Price: ",
+                              style: TextStyle(
+                                  color: Color(0xff9E9E9E),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12),
+                              children: [
+                                TextSpan(
+                                    text:
+                                        "${currencyFormatter.format(appointment.totalPrice)}",
+                                    style: TextStyle(
+                                        color: Color(0xFF66ADFF),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 20, horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                ),
+                Container(
+                  child: Text(
+                    "Services",
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  margin: const EdgeInsets.only(top: 20, left: 20),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    controller: controller,
+                    itemCount: appointment.serives?.length,
+                    itemBuilder: (BuildContext context, int i) {
+                      return Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  child: Image.asset(
+                                    "assets/images/keoluoc.png",
+                                    width: 30,
+                                  ),
+                                  padding: const EdgeInsets.all(10),
+                                  margin: const EdgeInsets.only(right: 10.0),
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffF2F5FF),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(20.0),
+                                    ),
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${appointment.serives?[i].serviceName}",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(height: 3.5),
+                                    RichText(
+                                      text: TextSpan(
+                                        text: 'Duration Time: ',
+                                        style: TextStyle(
+                                            color: Color(0xFF999999),
+                                            //fontWeight: FontWeight.bold,
+                                            fontSize: 10),
+                                        children: [
+                                          TextSpan(
+                                              text:
+                                                  "${appointment.serives?[i].durationTime} minutes",
+                                              style: TextStyle(
+                                                  color: Color(0xFF999999),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 10)),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Text(
+                                "${currencyFormatter.format(appointment.serives?[i].price)}",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold))
+                          ],
+                        ),
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            decoration: BoxDecoration(
+              color: Color(0xFFF3F3F3),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40),
+                  topRight: Radius.circular(40)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 7,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    },
+  );
 }

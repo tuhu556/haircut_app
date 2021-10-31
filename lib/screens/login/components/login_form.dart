@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:haircut_app/components/bottom_navigation_bar.dart';
 import 'package:haircut_app/components/form_error.dart';
 import 'package:haircut_app/components/rounded_button.dart';
 import 'package:haircut_app/constants/color.dart';
@@ -13,6 +14,7 @@ import 'package:haircut_app/screens/forgot_password/verify_code_screen.dart';
 import 'package:haircut_app/screens/home/home_screen.dart';
 import 'package:haircut_app/utils/api.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginForm extends StatefulWidget {
@@ -82,6 +84,8 @@ class _LoginFormState extends State<LoginForm> {
       prefs.setString("token", userData.token);
       String? token = prefs.getString("token");
       print(token);
+      final notificationModel = Provider.of<BadgeNotification>(context, listen: false);
+      notificationModel.getTotalNotification();
       Navigator.pushNamed(context, HomeScreen.routeName);
     } else if (response.statusCode == 208) {
       Navigator.pushNamed(context, VerifyCodeScreen.routeName,
