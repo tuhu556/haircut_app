@@ -29,6 +29,7 @@ class _BodyState extends State<Body> {
       "Accept": "application/json; charset=UTF-8"
     };
     var response = await http.get(url, headers: requestHeaders);
+    print(response);
     var jsonData = json.decode(response.body);
 
     for (var e in jsonData) {
@@ -112,6 +113,10 @@ class _BodyState extends State<Body> {
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(child: CircularProgressIndicator());
+                      } else if (!snapshot.hasData) {
+                        return Center(
+                          child: Text("You haven't any booking yet!"),
+                        );
                       }
                       if (snapshot.hasError) {
                         print(snapshot.error);
