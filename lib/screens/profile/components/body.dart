@@ -2,8 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:haircut_app/screens/profile/components/profile_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
+
+  @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  late Future<String> email;
+  Future<String> getUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String str = prefs.getString("email") ?? "";
+    return str;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    email = getUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +60,7 @@ class Body extends StatelessWidget {
                         height: size.height * 0.05,
                       ),
                       Text(
-                        "Hello...",
+                        "Hello $email",
                         style: TextStyle(
                             fontSize: 25, fontWeight: FontWeight.w700),
                       ),
@@ -68,9 +86,11 @@ class Body extends StatelessWidget {
                         text: "Log Out",
                         icon: "assets/icons/Log out.svg",
                         press: () async {
-                          SharedPreferences preferences = await SharedPreferences.getInstance();
+                          SharedPreferences preferences =
+                              await SharedPreferences.getInstance();
                           await preferences.clear();
-                          Navigator.popUntil(context, ModalRoute.withName('/login'));
+                          Navigator.popUntil(
+                              context, ModalRoute.withName('/login'));
                         },
                       ),
                     ],

@@ -45,6 +45,7 @@ class _BookingViewsState extends State<BookingViews> {
   List<Service>? _selectedServices = [];
   DateTime? bookingDate;
   DateTime? startTime;
+  DateTime createDate = DateTime.now();
   String? email;
   int? totalDuration = 0;
   double? totalPrice = 0;
@@ -278,6 +279,8 @@ class _BookingViewsState extends State<BookingViews> {
                                       Uri.parse('${Api.url}/createAppointment');
                                   final response = await http.post(url,
                                       body: jsonEncode(<String, dynamic>{
+                                        'createDate':
+                                            createDate.toIso8601String(),
                                         'cusEmail': email,
                                         'date': bookingDate!.toIso8601String(),
                                         'description': note,
