@@ -81,10 +81,12 @@ class _LoginFormState extends State<LoginForm> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString("user_data", _save);
       prefs.setString("email", email);
+      prefs.setString("name", userData.cusName);
       prefs.setString("token", userData.token);
       String? token = prefs.getString("token");
       print(token);
-      final notificationModel = Provider.of<BadgeNotification>(context, listen: false);
+      final notificationModel =
+          Provider.of<BadgeNotification>(context, listen: false);
       notificationModel.getTotalNotification();
       Navigator.pushNamed(context, HomeScreen.routeName);
     } else if (response.statusCode == 208) {

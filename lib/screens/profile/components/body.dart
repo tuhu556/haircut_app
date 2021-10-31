@@ -10,17 +10,11 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  late Future<String> email;
-  Future<String> getUserData() async {
+  Future<String> getUserName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String str = prefs.getString("email") ?? "";
-    return str;
-  }
+    String str = prefs.getString("name") ?? "";
 
-  @override
-  void initState() {
-    super.initState();
-    email = getUserData();
+    return str;
   }
 
   @override
@@ -59,10 +53,20 @@ class _BodyState extends State<Body> {
                       SizedBox(
                         height: size.height * 0.05,
                       ),
-                      Text(
-                        "Hello $email",
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.w700),
+                      Container(
+                        child: FutureBuilder(
+                          future: getUserName(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<String> snapshot) {
+                            if (!snapshot.hasData) return Container();
+                            final String? name = snapshot.data;
+                            return Text(
+                              "Hello " + name!,
+                              style: TextStyle(
+                                  fontSize: 25, fontWeight: FontWeight.w700),
+                            );
+                          },
+                        ),
                       ),
                       SizedBox(
                         height: size.height * 0.1,
