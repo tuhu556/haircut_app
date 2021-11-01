@@ -77,6 +77,11 @@ class _BodyState extends State<Body> {
                         press: () => {},
                       ),
                       ProfileMenu(
+                        text: "Change Password",
+                        icon: "assets/icons/Settings.svg",
+                        press: () {},
+                      ),
+                      ProfileMenu(
                         text: "Settings",
                         icon: "assets/icons/Settings.svg",
                         press: () {},
