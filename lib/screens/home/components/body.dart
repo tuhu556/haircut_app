@@ -32,8 +32,8 @@ class _BodyState extends State<Body> {
         context: context,
         builder: (_) {
           return new AlertDialog(
-            title: Text("Thông báo"),
-            content: Text("Push Notification : $payload"),
+            title: Text("Notification"),
+            content: Text("$payload"),
           );
         },
       );
@@ -47,7 +47,7 @@ class _BodyState extends State<Body> {
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
         print("message recieved");
         print(event.notification!.body);
-        _showNotificationWithDefaultSound();
+        _showNotificationWithDefaultSound(event.notification!.body ?? "");
         /* showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -70,7 +70,7 @@ class _BodyState extends State<Body> {
     });
   }
 
-  Future _showNotificationWithDefaultSound() async {
+  Future _showNotificationWithDefaultSound(String content) async {
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
         'your channel id', 'your channel name',
         channelDescription: 'your channel description',
@@ -83,10 +83,10 @@ class _BodyState extends State<Body> {
         android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
       0,
-      'Default Notification',
-      'Your booking has been accepted',
+      'Hello!',
+      content,
       platformChannelSpecifics,
-      payload: 'Default_Sound',
+      payload: content,
     );
   }
 
@@ -129,7 +129,7 @@ class _BodyState extends State<Body> {
                             image: AssetImage("assets/images/Book.png"),
                           ),
                           onTap: () {
-                            _showNotificationWithDefaultSound();
+                            //_showNotificationWithDefaultSound();
                             Navigator.pushNamed(
                               context,
                               BookingScreen.routeName,

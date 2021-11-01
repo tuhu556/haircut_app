@@ -69,7 +69,7 @@ class _BodyState extends State<Body> {
                         ),
                       ),
                       SizedBox(
-                        height: size.height * 0.1,
+                        height: size.height * 0.05,
                       ),
                       ProfileMenu(
                         text: "My Account",
