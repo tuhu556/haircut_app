@@ -47,8 +47,10 @@ class _BookingViewsState extends State<BookingViews> {
   DateTime? startTime;
   DateTime createDate = DateTime.now();
   String? email;
+  late String discountCode = "";
   int? totalDuration = 0;
   double? totalPrice = 0;
+  double? discountValue = 0;
   String _date = "";
   String _time = "";
   String? status = "";
@@ -260,9 +262,30 @@ class _BookingViewsState extends State<BookingViews> {
                           },
                         ),
                         SizedBox(
-                          height: size.height * 0.1,
+                          height: size.height * 0.01,
                         ),
-
+                        TextFormField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            labelText: 'Discount Code',
+                            labelStyle: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          onChanged: (disValue) {
+                            setState(() {
+                              discountCode = disValue;
+                              print(discountCode);
+                            });
+                          },
+                        ),
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Container(
