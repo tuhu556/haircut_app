@@ -31,7 +31,7 @@ dependencies:
   keyboard_dismisser: ^2.0.0
   flutter_svg: ^0.22.0
   custom_navigation_bar: ^0.8.2
-  provider: ^6.0.1
+  provider: ^5.0.0
   http: ^0.13.4
   another_flushbar: ^1.10.24
   date_picker_timeline: ^1.2.3
@@ -45,6 +45,7 @@ dependencies:
   firebase_core: ^1.8.0
   flutter_rating_bar: ^4.0.0
   pin_code_fields: ^7.3.0
+  flutter_local_notifications: ^9.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,8 +1,8 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:haircut_app/screens/booking/booking_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -17,12 +17,27 @@ class _BodyState extends State<Body> {
   }
 
   late FirebaseMessaging messaging;
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
   @override
   void initState() {
     super.initState();
-    /* Firebase.initializeApp().whenComplete(() { 
-      setState(() {});
-    }); */
+
+    var initializationSettingsAndroid = new AndroidInitializationSettings('app_icon');
+    var initializationSettingsIOS = new IOSInitializationSettings();
+    var initializationSettings = new InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: (String? payload) async {
+      showDialog(
+        context: context,
+        builder: (_) {
+          return new AlertDialog(
+            title: Text("Thông báo"),
+            content: Text("Push Notification : $payload"),
+          );
+        },
+      );
+    });
     messaging = FirebaseMessaging.instance;
     messaging.subscribeToTopic("all");
     messaging.getToken().then((token){
@@ -32,7 +47,8 @@ class _BodyState extends State<Body> {
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
         print("message recieved");
         print(event.notification!.body);
-        showDialog(
+        _showNotificationWithDefaultSound();
+        /* showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
@@ -47,13 +63,32 @@ class _BodyState extends State<Body> {
                 )
               ],
             );
-          });
+          }); */
     });
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print('Message clicked!');
     });
   }
-  
+
+  Future _showNotificationWithDefaultSound() async {
+    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+        'your channel id', 'your channel name',
+        channelDescription: 'your channel description',
+        importance: Importance.max,
+        priority: Priority.high,
+        ticker: 'ticker',
+        icon: "app_icon");
+    var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+    var platformChannelSpecifics = new NotificationDetails(
+        android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Default Notification',
+      'Your booking has been accepted',
+      platformChannelSpecifics,
+      payload: 'Default_Sound',
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +129,7 @@ class _BodyState extends State<Body> {
                             image: AssetImage("assets/images/Book.png"),
                           ),
                           onTap: () {
+                            _showNotificationWithDefaultSound();
                             Navigator.pushNamed(
                               context,
                               BookingScreen.routeName,
