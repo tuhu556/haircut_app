@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:haircut_app/components/rounded_button.dart';
 import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/models/appointment.dart';
+import 'package:haircut_app/models/discount.dart';
 import 'package:haircut_app/models/service.dart';
 import 'package:haircut_app/screens/success_booking/success_booking_screen.dart';
 import 'package:haircut_app/utils/api.dart';
@@ -41,20 +42,22 @@ class BookingViews extends StatefulWidget {
 class _BookingViewsState extends State<BookingViews> {
   final currencyFormatter = NumberFormat.currency(locale: 'vi');
   late Appointment _appointment;
-
+  late Discount _discount;
   List<Service>? _selectedServices = [];
   DateTime? bookingDate;
   DateTime? startTime;
   DateTime createDate = DateTime.now();
   String? email;
-  late String discountCode = "";
+  late String discountCode = "No Discount";
   int? totalDuration = 0;
   double? totalPrice = 0;
   double? discountValue = 0;
   String _date = "";
   String _time = "";
+  String _dateNow = "";
   String? status = "";
   late String note = "";
+  bool _isPressed = true;
   @override
   void initState() {
     email = widget.appointment.cusEmail;
@@ -69,6 +72,7 @@ class _BookingViewsState extends State<BookingViews> {
 
   @override
   Widget build(BuildContext context) {
+    _dateNow = DateFormat('dd-MM-yyyy').format(createDate);
     _date = DateFormat('dd MMM, yyyy').format(bookingDate!);
     _time = DateFormat('H:mm').format(startTime!);
     Size size = MediaQuery.of(context).size;
@@ -181,6 +185,27 @@ class _BookingViewsState extends State<BookingViews> {
                             ),
                           ],
                         ),
+                        discountCode != "No Discount"
+                            ? Row(
+                                children: [
+                                  Text(
+                                    "Discount Code",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Spacer(),
+                                  Text(
+                                    "$discountCode",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ],
+                              )
+                            : Row(
+                                children: [],
+                              ),
                         SizedBox(
                           height: size.height * 0.03,
                         ),
@@ -264,25 +289,91 @@ class _BookingViewsState extends State<BookingViews> {
                         SizedBox(
                           height: size.height * 0.01,
                         ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide.none,
+                        Row(
+                          children: [
+                            Container(
+                              width: size.width * 0.5,
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  filled: true,
+                                  labelText: 'Discount Code',
+                                  labelStyle: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                onChanged: (disValue) {
+                                  setState(() {
+                                    discountCode = disValue;
+                                  });
+                                },
+                              ),
                             ),
-                            filled: true,
-                            labelText: 'Discount Code',
-                            labelStyle: TextStyle(
-                              color: Colors.black,
+                            SizedBox(
+                              width: size.width * 0.01,
                             ),
-                          ),
-                          onChanged: (disValue) {
-                            setState(() {
-                              discountCode = disValue;
-                              print(discountCode);
-                            });
-                          },
+                            Container(
+                              width: size.width * 0.45,
+                              child: RoundedButton(
+                                color: Colors.black,
+                                textColor: Colors.white,
+                                text: "Submit",
+                                press: () async {
+                                  print(_isPressed);
+                                  if (_isPressed == true) {
+                                    SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                    String? token = prefs.getString("token");
+                                    print(_dateNow);
+                                    final url = Uri.parse(
+                                        '${Api.url}/checkDiscountCode?createDate=$_dateNow&discountCode=$discountCode');
+                                    final response = await http.post(
+                                      url,
+                                      headers: {
+                                        'Content-Type': 'application/json',
+                                        'Accept': 'application/json',
+                                        'Authorization': '$token',
+                                      },
+                                    );
+                                    setState(
+                                      () {
+                                        if (response.statusCode == 200) {
+                                          _discount = Discount.fromJson(
+                                              json.decode(response.body));
+                                          discountValue = _discount.value;
+                                          totalPrice = (totalPrice! -
+                                              totalPrice! *
+                                                  (discountValue! / 100));
+                                          _isPressed = false;
+                                        } else {
+                                          Flushbar(
+                                            title: "Wrong code",
+                                            message:
+                                                "Code is wrong or expired!",
+                                            duration: Duration(seconds: 3),
+                                          ).show(context);
+                                        }
+                                      },
+                                    );
+
+                                    print(response.statusCode);
+                                    print(discountCode);
+                                  } else {
+                                    Flushbar(
+                                      message:
+                                          "You only have 1 time to use the code!",
+                                      duration: Duration(seconds: 3),
+                                    ).show(context);
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
                         ),
+
                         SizedBox(
                           height: size.height * 0.01,
                         ),
@@ -307,12 +398,14 @@ class _BookingViewsState extends State<BookingViews> {
                                         'cusEmail': email,
                                         'date': bookingDate!.toIso8601String(),
                                         'description': note,
+                                        'empEmail': '',
                                         'listService': _selectedServices,
                                         'startTime':
                                             startTime!.toIso8601String(),
                                         'status': "ON PROCESS",
                                         'totalDuration': totalDuration,
-                                        'totalPrice': totalPrice
+                                        'totalPrice': totalPrice,
+                                        'discountCode': discountCode,
                                       }),
                                       headers: {
                                         'Content-Type': 'application/json',
