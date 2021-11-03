@@ -271,9 +271,7 @@ class _BodyState extends State<Body> {
                         },
                         child: const Text('Cancel'),
                       )
-                    : Container(),
-                appointment.status == "DONE"
-                    ? OutlinedButton(
+                    : appointment.status == "DONE" ? OutlinedButton(
                         onPressed: () {
                           Navigator.pushNamed(context, RatingScreen.routeName,
                               arguments: {"apptID": appointment.apptID});
