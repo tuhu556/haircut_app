@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:haircut_app/screens/profile/components/edit_profile.dart';
 import 'package:haircut_app/screens/profile/components/profile_menu.dart';
+import 'package:haircut_app/screens/profile/components/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Body extends StatefulWidget {
@@ -74,12 +76,16 @@ class _BodyState extends State<Body> {
                       ProfileMenu(
                         text: "My Account",
                         icon: "assets/icons/User Icon.svg",
-                        press: () => {},
+                        press: () => {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile()))
+                        },
                       ),
                       ProfileMenu(
                         text: "Change Password",
                         icon: "assets/icons/Settings.svg",
-                        press: () {},
+                        press: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => UpdatePassword()));
+                        },
                       ),
                       ProfileMenu(
                         text: "Settings",

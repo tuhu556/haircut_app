@@ -286,7 +286,7 @@ class _BodyState extends State<Body> {
                         },
                         child: const Text(
                           'Rating',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.grey),
                         ),
                       )
                     : Container(),
