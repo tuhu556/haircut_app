@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/models/appointment.dart';
 import 'package:haircut_app/models/feedback.dart' as feedbackModel;
 import 'package:haircut_app/screens/rating/rating_screen.dart';
@@ -266,19 +267,33 @@ class _BodyState extends State<Body> {
                 appointment.status == "ON PROCESS" ||
                         appointment.status == "ACCEPT"
                     ? OutlinedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              AppColors.colorDD323A),
+                        ),
                         onPressed: () {
                           cancelAppointment(appointment.apptID ?? "");
                         },
-                        child: const Text('Cancel'),
+                        child: const Text(
+                          'Cancel',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       )
                     : Container(),
                 appointment.status == "DONE"
                     ? OutlinedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              AppColors.colorGreen),
+                        ),
                         onPressed: () {
                           Navigator.pushNamed(context, RatingScreen.routeName,
                               arguments: {"apptID": appointment.apptID});
                         },
-                        child: const Text('Rating'),
+                        child: const Text(
+                          'Rating',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       )
                     : Container(),
               ],
@@ -322,7 +337,8 @@ class _BodyState extends State<Body> {
   }
 }
 
-void showSheet(BuildContext context, Appointment appointment, String dateString, String timeString) {
+void showSheet(BuildContext context, Appointment appointment, String dateString,
+    String timeString) {
   _BodyState body = new _BodyState();
   List<dynamic> listStatus = body.getTextStatus(appointment.status ?? "");
   final currencyFormatter = NumberFormat.currency(locale: 'vi');
@@ -380,7 +396,8 @@ void showSheet(BuildContext context, Appointment appointment, String dateString,
                             margin: const EdgeInsets.only(right: 20),
                             child: OutlinedButton(
                               onPressed: () {
-                                body.cancelAppointment(appointment.apptID ?? "");
+                                body.cancelAppointment(
+                                    appointment.apptID ?? "");
                                 Navigator.pop(context);
                               },
                               child: const Text('Cancel'),
@@ -529,8 +546,8 @@ void showSheet(BuildContext context, Appointment appointment, String dateString,
                     ],
                   ),
                   margin: const EdgeInsets.symmetric(vertical: 10),
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 20, horizontal: 20),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -539,8 +556,7 @@ void showSheet(BuildContext context, Appointment appointment, String dateString,
                 Container(
                   child: Text(
                     "Services",
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   margin: const EdgeInsets.only(top: 20, left: 20),
                 ),
@@ -572,8 +588,7 @@ void showSheet(BuildContext context, Appointment appointment, String dateString,
                                 ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       "${appointment.serives?[i].serviceName}",
@@ -607,8 +622,7 @@ void showSheet(BuildContext context, Appointment appointment, String dateString,
                             Text(
                                 "${currencyFormatter.format(appointment.serives?[i].price)}",
                                 style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold))
+                                    fontSize: 14, fontWeight: FontWeight.bold))
                           ],
                         ),
                         margin: const EdgeInsets.symmetric(vertical: 10),
@@ -628,8 +642,7 @@ void showSheet(BuildContext context, Appointment appointment, String dateString,
             decoration: BoxDecoration(
               color: Color(0xFFF3F3F3),
               borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40),
-                  topRight: Radius.circular(40)),
+                  topLeft: Radius.circular(40), topRight: Radius.circular(40)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
