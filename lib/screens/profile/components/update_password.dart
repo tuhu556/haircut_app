@@ -82,31 +82,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
         duration: Duration(seconds: 3),
       ).show(context);
     }
-    
-    /* if (response.statusCode == 200) {
-      Customer userData = Customer.formJson(json.decode(response.body));
-      var _save = json.encode(userData.toJson());
-      
-      prefs.setString("user_data", _save);
-      prefs.setString("email", email);
-      prefs.setString("name", userData.cusName);
-      prefs.setString("token", userData.token);
-      String? token = prefs.getString("token");
-      print(token);
-      final notificationModel =
-          Provider.of<BadgeNotification>(context, listen: false);
-      notificationModel.getTotalNotification();
-      Navigator.pushNamed(context, HomeScreen.routeName);
-    } else if (response.statusCode == 208) {
-      Navigator.pushNamed(context, VerifyCodeScreen.routeName,
-          arguments: {'email': email, 'password': password});
-    } else {
-      Flushbar(
-        title: "Failed Login",
-        message: "Wrong email or password",
-        duration: Duration(seconds: 3),
-      ).show(context);
-    } */
+
     setState(() {
       isLoading = false;
     });
