@@ -21,6 +21,7 @@ class AppColors {
   static final Color colorECF0F1 = HexColor("#ECF0F1");
   static final Color color3E3E3E = HexColor("#3E3E3E");
   static final Color colorDDDDDD = HexColor("#DDDDDD");
+  static final Color colorGreen = HexColor("#2bc910");
 }
 
 class HexColor extends Color {
