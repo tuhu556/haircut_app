@@ -160,7 +160,7 @@ class _BodyState extends State<Body> {
     } else if (status == "ACCEPT") {
       statusText = "ACCEPTED";
       statusColor = 0xff5cff92;
-    } else if (status == "CANCEL BY ADMIN") {
+    } else if (status == "DENY") {
       statusText = "REJECTED";
       statusColor = 0xffff5e5e;
     } else if (status == "CANCEL BY CUSTOMER") {
@@ -279,14 +279,20 @@ class _BodyState extends State<Body> {
                           style: TextStyle(color: Colors.white),
                         ),
                       )
-                    : appointment.status == "DONE" ? OutlinedButton(
+                    : Container(),
+                appointment.status == "DONE"
+                    ? OutlinedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              AppColors.colorGreen),
+                        ),
                         onPressed: () {
                           Navigator.pushNamed(context, RatingScreen.routeName,
                               arguments: {"apptID": appointment.apptID});
                         },
                         child: const Text(
                           'Rating',
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(color: Colors.white),
                         ),
                       )
                     : Container(),
@@ -494,7 +500,7 @@ void showSheet(BuildContext context, Appointment appointment, String dateString,
                               ],
                             ),
                           ),
-                          appointment.description != ""
+                          appointment.description == ""
                               ? SizedBox(height: 2.5)
                               : Container(),
                           appointment.description != ""
