@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:haircut_app/screens/booking/booking_screen.dart';
 import 'package:haircut_app/screens/cart/cart_screen.dart';
 import 'package:haircut_app/screens/datetime/datetime_screen.dart';
+import 'package:haircut_app/screens/feedbackEmp/feedbackEmp_screen.dart';
 import 'package:haircut_app/screens/first/firs_screen.dart';
 import 'package:haircut_app/screens/forgot_password/change_password_screen.dart';
 import 'package:haircut_app/screens/forgot_password/code_screen.dart';
@@ -11,11 +12,14 @@ import 'package:haircut_app/screens/forgot_password/verify_code_forgot_pass_scre
 import 'package:haircut_app/screens/forgot_password/verify_code_screen.dart';
 import 'package:haircut_app/screens/home/home_screen.dart';
 import 'package:haircut_app/screens/login/login_screen.dart';
+import 'package:haircut_app/screens/loginEmp/login_emp_screen.dart';
 import 'package:haircut_app/screens/notification/notification_screen.dart';
 import 'package:haircut_app/screens/order/order_screen.dart';
 import 'package:haircut_app/screens/profile/profile_screen.dart';
+import 'package:haircut_app/screens/profileEmp/profileEmp_screen.dart';
 import 'package:haircut_app/screens/rating/rating_screen.dart';
 import 'package:haircut_app/screens/rating/thanks_screen.dart';
+import 'package:haircut_app/screens/schedule/schedule_screen.dart';
 import 'package:haircut_app/screens/sign_up/sign_up_screen.dart';
 import 'package:haircut_app/screens/success_booking/success_booking_screen.dart';
 
@@ -43,4 +47,8 @@ final Map<String, WidgetBuilder> routes = {
   RatingScreen.routeName: (context) => RatingScreen(),
   ThanksScreen.routeName: (context) => ThanksScreen(),
   PinCodeVerificationScreen.routeName: (context) => PinCodeVerificationScreen(),
+  ScheduleScreen.routeName: (context) => ScheduleScreen(),
+  ProfileEmpScreen.routeName: (context) => ProfileEmpScreen(),
+  FeedbackEmpScreen.routeName: (context) => FeedbackEmpScreen(),
+  LoginEmpScreen.routeName: (context) => LoginEmpScreen(),
 };

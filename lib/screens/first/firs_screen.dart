@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:haircut_app/components/rounded_button.dart';
 import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/screens/login/login_screen.dart';
+import 'package:haircut_app/screens/loginEmp/login_emp_screen.dart';
 import 'package:haircut_app/screens/sign_up/sign_up_screen.dart';
 
 class FirstScreen extends StatelessWidget {
@@ -40,6 +41,19 @@ class FirstScreen extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       SignUpScreen.routeName,
+                    );
+                  },
+                  color: AppColors.color3E3E3E,
+                  textColor: Colors.white),
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              RoundedButton(
+                  text: "Login for Employee",
+                  press: () {
+                    Navigator.pushNamed(
+                      context,
+                      LoginEmpScreen.routeName,
                     );
                   },
                   color: AppColors.color3E3E3E,
