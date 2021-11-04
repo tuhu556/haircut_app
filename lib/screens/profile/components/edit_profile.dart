@@ -99,8 +99,11 @@ class _EditProfileState extends State<EditProfile> {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(child: CircularProgressIndicator());
                       } else if (!snapshot.hasData) {
-                        return Center(
-                          child: Text("Error"),
+                        return Container(
+                          margin: const EdgeInsets.only(top: 80),
+                          child: Center(
+                            child: Text("You are employee", style: TextStyle(fontWeight: FontWeight.bold),),
+                          ),
                         );
                       }
                       if (snapshot.hasError) {

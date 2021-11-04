@@ -94,7 +94,7 @@ class _BottomNavBarEmpState extends State<BottomNavBarEmp> {
                     onPressed: () {
                       if (MenuState.profile != widget.selectedMenu)
                         Navigator.pushNamed(
-                            context, ProfileEmpScreen.routeName);
+                            context, ProfileScreen.routeName);
                     }),
               ),
             ],

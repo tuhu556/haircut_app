@@ -81,6 +81,7 @@ class _LoginEmpFormState extends State<LoginEmpForm> {
       Employee empData = Employee.fromJson(json.decode(response.body));
       var _save = json.encode(empData.toJson());
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("user_type", "emp");
       prefs.setString("emp_data", _save);
       prefs.setString("email", email);
       prefs.setString("name", empData.empName!);

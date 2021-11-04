@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:haircut_app/components/bottom_navigation_bar.dart';
+import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/routes.dart';
 import 'package:haircut_app/screens/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -23,9 +24,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Hair cut App',
-        theme: ThemeData(textTheme: GoogleFonts.poppinsTextTheme(
-          Theme.of(context).textTheme,
-        ),),
+        theme: ThemeData(
+          textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme,),
+          primaryColor: AppColors.color3E3E3E,
+        ),
         initialRoute: SplashScreen.routeName,
         routes: routes,
       ),

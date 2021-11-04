@@ -79,6 +79,7 @@ class _LoginFormState extends State<LoginForm> {
       Customer userData = Customer.formJson(json.decode(response.body));
       var _save = json.encode(userData.toJson());
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("user_type", "cs");
       prefs.setString("user_data", _save);
       prefs.setString("email", email);
       prefs.setString("name", userData.cusName);

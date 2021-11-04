@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:haircut_app/screens/login/login_screen.dart';
+import 'package:haircut_app/screens/loginEmp/login_emp_screen.dart';
 import 'package:haircut_app/screens/profile/components/edit_profile.dart';
 import 'package:haircut_app/screens/profile/components/profile_menu.dart';
 import 'package:haircut_app/screens/profile/components/update_password.dart';
@@ -15,6 +17,13 @@ class _BodyState extends State<Body> {
   Future<String> getUserName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String str = prefs.getString("name") ?? "";
+
+    return str;
+  }
+
+  Future<String> getRole() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String str = prefs.getString("user_type") ?? "";
 
     return str;
   }
@@ -101,11 +110,15 @@ class _BodyState extends State<Body> {
                         text: "Log Out",
                         icon: "assets/icons/Log out.svg",
                         press: () async {
-                          SharedPreferences preferences =
-                              await SharedPreferences.getInstance();
-                          await preferences.clear();
-                          Navigator.popUntil(
-                              context, ModalRoute.withName('/login'));
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          if (prefs.getString("user_type") == "cs") {
+                            Navigator.popUntil(context, ModalRoute.withName(LoginScreen.routeName));
+                          } else {
+                            Navigator.popUntil(context, ModalRoute.withName(LoginEmpScreen.routeName));
+                          }
+
+                          await prefs.clear();
+                          
                         },
                       ),
                     ],
