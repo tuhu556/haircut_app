@@ -1,24 +1,24 @@
-class Feedback {
-  final String feedbackID;
-  final String cusEmail;
-  final String apptID;
-  final double rating;
-  final String commnent;
+class FeedbackCus {
+  String? feedbackID;
+  String? cusEmail;
+  String? apptID;
+  double? rating;
+  String? comment;
 
-  Feedback({
-    required this.feedbackID,
-    required this.cusEmail,
-    required this.apptID,
-    required this.rating,
-    required this.commnent,
+  FeedbackCus({
+    this.feedbackID,
+    this.cusEmail,
+    this.apptID,
+    this.rating,
+    this.comment,
   });
 
-  factory Feedback.formJson(Map<String, dynamic> json) {
-    return Feedback(
-      feedbackID: json['feedbackID'],
-      cusEmail: json['cusEmail'],
-      apptID: json['apptID'],
-      rating: json['rating'],
-      commnent: json['commnent']);
+  factory FeedbackCus.formJson(Map<String, dynamic> json) {
+    return FeedbackCus(
+        feedbackID: json['feedbackID'],
+        cusEmail: json['cusEmail'],
+        apptID: json['apptID'],
+        rating: json['rating'],
+        comment: json['comment']);
   }
 }

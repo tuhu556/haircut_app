@@ -92,9 +92,7 @@ class _BottomNavBarEmpState extends State<BottomNavBarEmp> {
                           : inActiveIconColor,
                     ),
                     onPressed: () {
-                      if (MenuState.profile != widget.selectedMenu)
-                        Navigator.pushNamed(
-                            context, ProfileScreen.routeName);
+                      Navigator.pushNamed(context, ProfileEmpScreen.routeName);
                     }),
               ),
             ],

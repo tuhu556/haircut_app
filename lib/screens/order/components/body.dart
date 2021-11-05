@@ -280,7 +280,7 @@ class _BodyState extends State<Body> {
                         ),
                       )
                     : Container(),
-                appointment.status == "DONE"
+                appointment.status == "DONE" && appointment.feedbacked == false
                     ? OutlinedButton(
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
@@ -500,10 +500,11 @@ void showSheet(BuildContext context, Appointment appointment, String dateString,
                               ],
                             ),
                           ),
+                          SizedBox(height: 2.5),
                           appointment.description == ""
                               ? SizedBox(height: 2.5)
                               : Container(),
-                          appointment.description != ""
+                          appointment.description != null
                               ? RichText(
                                   text: TextSpan(
                                     text: "Note: ",
@@ -514,6 +515,29 @@ void showSheet(BuildContext context, Appointment appointment, String dateString,
                                     children: [
                                       TextSpan(
                                           text: "${appointment.description}",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12)),
+                                    ],
+                                  ),
+                                )
+                              : Container(),
+                          SizedBox(height: 2.5),
+                          appointment.empEmail == ""
+                              ? SizedBox(height: 2.5)
+                              : Container(),
+                          appointment.empEmail != null
+                              ? RichText(
+                                  text: TextSpan(
+                                    text: "Barber: ",
+                                    style: TextStyle(
+                                        color: Color(0xff9E9E9E),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12),
+                                    children: [
+                                      TextSpan(
+                                          text: "${appointment.empEmail}",
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.bold,

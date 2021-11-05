@@ -1,6 +1,5 @@
 import 'package:haircut_app/models/feedback.dart';
 import 'package:haircut_app/models/service.dart';
-import 'package:intl/intl.dart';
 
 class Appointment {
   String? apptID;
@@ -14,7 +13,9 @@ class Appointment {
   String? status;
   List<Service>? serives;
   List<String>? serivceID;
-  Feedback? feedback;
+  bool? feedbacked;
+  String? empEmail;
+  // FeedbackCus? feedback;
 
   Appointment({
     this.apptID,
@@ -28,7 +29,8 @@ class Appointment {
     this.status,
     this.serives,
     this.serivceID,
-    this.feedback,
+    this.feedbacked,
+    this.empEmail,
   });
 
   factory Appointment.formJson(Map<String, dynamic> json) {
@@ -39,14 +41,20 @@ class Appointment {
     return Appointment(
       apptID: json['apptID'],
       cusEmail: json['cusEmail'],
-      createDate: DateTime.parse(json['createDate']), //new DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(json['date']), //json['date'],
-      date: DateTime.parse(json['date']), //new DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(json['date']), //json['date'],
-      startTime: DateTime.parse(json['startTime']), //new DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(json['startTime']),
+      createDate: DateTime.parse(json[
+          'createDate']), //new DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(json['date']), //json['date'],
+      date: DateTime.parse(json[
+          'date']), //new DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(json['date']), //json['date'],
+      startTime: DateTime.parse(json[
+          'startTime']), //new DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(json['startTime']),
       totalDuration: json['totalDuration'],
       description: json['description'],
       totalPrice: json['totalPrice'],
       status: json['status'],
       serives: services,
-      serivceID: json['serivceID']);
+      serivceID: json['serivceID'],
+      feedbacked: json['feedbacked'],
+      empEmail: json['empEmail'],
+    );
   }
 }
