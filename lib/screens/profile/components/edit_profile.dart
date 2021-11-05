@@ -9,8 +9,7 @@ import 'package:haircut_app/models/customer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfile extends StatefulWidget {
-  
-  EditProfile({ Key? key }) : super(key: key);
+  EditProfile({Key? key}) : super(key: key);
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -41,10 +40,9 @@ class _EditProfileState extends State<EditProfile> {
 
   Future<bool> getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    Customer customer = Customer.formJson(json.decode(prefs.getString("user_data") ?? ""));
-    email = customer.cusEmail;
-    fullName = customer.cusName;
-    phoneNumber = customer.phone;
+    email = prefs.getString("email");
+    fullName = prefs.getString("name");
+    phoneNumber = prefs.getString("phone");
     return true;
   }
 
@@ -74,15 +72,14 @@ class _EditProfileState extends State<EditProfile> {
                   width: double.infinity,
                   height: 160,
                   child: Container(
-                    alignment: Alignment(0.0,4.0),
+                    alignment: Alignment(0.0, 4.0),
                     child: CircleAvatar(
                       backgroundColor: Colors.white,
                       radius: 60.0,
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF8EE4FA),
-                        backgroundImage: NetworkImage(
-                            "https://i.imgur.com/jc5noE0.png"
-                        ),
+                        backgroundImage:
+                            NetworkImage("https://i.imgur.com/jc5noE0.png"),
                         radius: 55.0,
                       ),
                     ),
@@ -95,14 +92,18 @@ class _EditProfileState extends State<EditProfile> {
                   key: _formKey,
                   child: FutureBuilder(
                     future: getData(),
-                    builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    builder: (BuildContext context,
+                        AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(child: CircularProgressIndicator());
                       } else if (!snapshot.hasData) {
                         return Container(
                           margin: const EdgeInsets.only(top: 80),
                           child: Center(
-                            child: Text("You are employee", style: TextStyle(fontWeight: FontWeight.bold),),
+                            child: Text(
+                              "You are employee",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         );
                       }
@@ -113,20 +114,26 @@ class _EditProfileState extends State<EditProfile> {
                       } else {
                         return Column(
                           children: [
-                            SizedBox(height: 80,),
+                            SizedBox(
+                              height: 80,
+                            ),
                             emailForm(),
-                            SizedBox(height: 30,),
+                            SizedBox(
+                              height: 30,
+                            ),
                             fullNameForm(),
-                            SizedBox(height: 30,),
+                            SizedBox(
+                              height: 30,
+                            ),
                             phoneNumberForm(),
                             FormError(errors: errors),
-                            SizedBox(height: 30,),
+                            SizedBox(
+                              height: 30,
+                            ),
                             !isLoading
                                 ? new RoundedButton(
                                     text: "Update",
-                                    press: () {
-                                      
-                                    },
+                                    press: () {},
                                     color: AppColors.color3E3E3E,
                                     textColor: Colors.white)
                                 : Center(

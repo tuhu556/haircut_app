@@ -82,6 +82,7 @@ class _LoginFormState extends State<LoginForm> {
       prefs.setString("user_type", "cs");
       prefs.setString("user_data", _save);
       prefs.setString("email", email);
+      prefs.setString("phone", userData.phone);
       prefs.setString("name", userData.cusName);
       prefs.setString("token", userData.token);
       String? token = prefs.getString("token");
