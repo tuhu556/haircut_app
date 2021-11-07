@@ -43,11 +43,6 @@ class _BodyState extends State<Body> {
     return services;
   }
 
-  void getCustomer() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString("email")!;
-  }
-
   late FirebaseMessaging messaging;
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
@@ -129,7 +124,6 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    getCustomer();
     return SafeArea(
       child: Center(
         child: Column(
