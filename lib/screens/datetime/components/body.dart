@@ -178,8 +178,6 @@ class _BodyState extends State<Body> {
                                 double totalPrice = 0;
                                 List<String> _serviceList = [];
 
-                                print("Date: $bookingDate");
-                                print("Time: $startTime");
                                 SharedPreferences prefs =
                                     await SharedPreferences.getInstance();
                                 final String status = "ON PROCCESS";
@@ -188,8 +186,7 @@ class _BodyState extends State<Body> {
                                 String? email = prefs.getString("email");
                                 totalPrice = caculateTotalPrice(
                                     totalPrice, _selectedService);
-                                print("totalPrice: " + totalPrice.toString());
-                                print(_selectedService.length);
+
                                 totalDuration = caculateTotalDuration(
                                     totalDuration, _selectedService);
                                 _appointment = Appointment(
@@ -323,7 +320,6 @@ Future<Appointment> createAppoinment(
     List<String> serviceList) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? email = prefs.getString("email");
-  print(email);
   final String status = "ON PROCCESS";
   final String note = "";
   String id = "";
@@ -338,7 +334,6 @@ Future<Appointment> createAppoinment(
       serives: selectedService,
       serivceID: serviceList);
   return appointment;
-  print(email);
 }
 
 // void addListService(List<String?> serviceList, List<Service> selectedService) {
@@ -354,7 +349,6 @@ double caculateTotalPrice(double totalPrice, List<Service> selectedService) {
     totalPrice += item.price!;
   }
   return totalPrice;
-  print("TotalPrice: $totalPrice");
 }
 
 int caculateTotalDuration(int totalDuration, List<Service> selectedService) {
@@ -362,5 +356,4 @@ int caculateTotalDuration(int totalDuration, List<Service> selectedService) {
     totalDuration += item.durationTime!;
   }
   return totalDuration;
-  print("totalDuration: $totalDuration");
 }

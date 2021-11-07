@@ -38,7 +38,6 @@ class _BodyState extends State<Body> {
       var bID = b.apptID;
       return bID!.compareTo(aID!);
     });
-    print("le: " + feedbacks.length.toString());
     return feedbacks;
   }
 
@@ -100,7 +99,6 @@ class _BodyState extends State<Body> {
                           );
                         }
                         if (snapshot.hasError) {
-                          print(snapshot.error);
                           return Center(
                             child: Text('Error'),
                           );

@@ -322,12 +322,10 @@ class _BookingViewsState extends State<BookingViews> {
                                 textColor: Colors.white,
                                 text: "Submit",
                                 press: () async {
-                                  print(_isPressed);
                                   if (_isPressed == true) {
                                     SharedPreferences prefs =
                                         await SharedPreferences.getInstance();
                                     String? token = prefs.getString("token");
-                                    print(_dateNow);
                                     final url = Uri.parse(
                                         '${Api.url}/checkDiscountCode?createDate=$_dateNow&discountCode=$discountCode');
                                     final response = await http.post(
@@ -358,9 +356,6 @@ class _BookingViewsState extends State<BookingViews> {
                                         }
                                       },
                                     );
-
-                                    print(response.statusCode);
-                                    print(discountCode);
                                   } else {
                                     Flushbar(
                                       message:
@@ -384,11 +379,9 @@ class _BookingViewsState extends State<BookingViews> {
                             child: RoundedButton(
                                 text: "Book now",
                                 press: () async {
-                                  print('note:' + note);
                                   SharedPreferences prefs =
                                       await SharedPreferences.getInstance();
                                   String? token = prefs.getString("token");
-                                  print(token);
                                   final url =
                                       Uri.parse('${Api.url}/createAppointment');
                                   final response = await http.post(url,
@@ -432,8 +425,6 @@ class _BookingViewsState extends State<BookingViews> {
                                       duration: Duration(seconds: 4),
                                     ).show(context);
                                   }
-
-                                  print(response.statusCode);
                                 },
                                 color: Colors.black,
                                 textColor: Colors.white),

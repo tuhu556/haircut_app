@@ -99,7 +99,6 @@ class _BodyState extends State<Body> {
                           return Center(child: CircularProgressIndicator());
                         }
                         if (snapshot.hasError) {
-                          print(snapshot);
                           return Center(
                             child: Text('Error'),
                           );

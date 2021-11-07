@@ -72,9 +72,6 @@ class _LoginFormState extends State<LoginForm> {
     };
     final response = await http.post(url, body: body);
 
-    print(response.statusCode);
-    print(response.body);
-
     if (response.statusCode == 200) {
       Customer userData = Customer.formJson(json.decode(response.body));
       var _save = json.encode(userData.toJson());
