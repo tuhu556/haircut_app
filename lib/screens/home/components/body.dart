@@ -12,8 +12,9 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  void getCustomer() async {
+  Future<String> getCustomer() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString("email")!;
   }
 
   late FirebaseMessaging messaging;
@@ -47,23 +48,13 @@ class _BodyState extends State<Body> {
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
         print("message recieved");
         print(event.notification!.body);
-        _showNotificationWithDefaultSound(event.notification!.body ?? "");
-        /* showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Notification"),
-              content: Text(event.notification!.body!),
-              actions: [
-                TextButton(
-                  child: Text("Ok"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            );
-          }); */
+        getCustomer().then((email){
+          print(email);
+          print(event.data["email"]);
+          /* if (email == event.data["email"]) {
+            _showNotificationWithDefaultSound(event.notification!.body ?? "");
+          } */
+        });
     });
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print('Message clicked!');

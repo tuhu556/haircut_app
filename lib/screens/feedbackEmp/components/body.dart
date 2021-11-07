@@ -61,6 +61,7 @@ class _BodyState extends State<Body> {
     return SafeArea(
       child: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
@@ -161,6 +162,8 @@ class _BodyState extends State<Body> {
                     ),
                   ),
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       RatingBar.builder(
                         ignoreGestures: true,
