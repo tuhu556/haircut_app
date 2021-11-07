@@ -11,6 +11,7 @@ class Service {
   bool? status;
   int? durationTime;
   bool isSelected;
+  int? count;
 
   Service(
       {this.id,
@@ -19,7 +20,8 @@ class Service {
       this.price,
       this.durationTime,
       this.status,
-      this.isSelected = false});
+      this.isSelected = false,
+      this.count});
 
   factory Service.formJson(Map<String, dynamic> json) {
     return Service(
@@ -28,7 +30,8 @@ class Service {
         serviceName: json['serviceName'],
         price: json['price'],
         durationTime: json['durationTime'],
-        status: json['status']);
+        status: json['status'],
+        count: json['count']);
   }
   Map<String, dynamic> toJson() => {
         "id": id,

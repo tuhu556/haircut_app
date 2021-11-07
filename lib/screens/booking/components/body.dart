@@ -209,14 +209,15 @@ class _BodyState extends State<Body> {
               children: [
                 Text("Duration Time ${durationTime.toString()} min"),
                 Container(
-                    margin: EdgeInsets.only(top: 5),
-                    child: Text(
-                      "${currencyFormatter.format(price)}",
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF4063c0)),
-                    ))
+                  margin: EdgeInsets.only(top: 5),
+                  child: Text(
+                    "${currencyFormatter.format(price)}",
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF4063c0)),
+                  ),
+                ),
               ],
             ),
             isThreeLine: false,

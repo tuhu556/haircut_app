@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:haircut_app/constants/color.dart';
 import 'package:haircut_app/models/feedback.dart';
 import 'package:haircut_app/utils/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,9 +28,7 @@ class _BodyState extends State<Body> {
       "Accept": "application/json; charset=UTF-8"
     };
     var response = await http.get(url, headers: requestHeaders);
-    print(response.statusCode);
     var jsonData = json.decode(response.body);
-    print(jsonData);
     for (var e in jsonData) {
       FeedbackCus feedback = FeedbackCus.formJson(e);
       feedbacks.add(feedback);
@@ -203,20 +202,40 @@ class _BodyState extends State<Body> {
                         onRatingUpdate: (rating) {},
                       ),
                       SizedBox(height: 5.5),
-                      Text(
-                        "ID : " + feedback.apptID.toString(),
-                        style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            color: Color(0xff4B4B4B),
-                            fontSize: 16),
+                      RichText(
+                        text: TextSpan(
+                          text: 'ID: ',
+                          style: TextStyle(
+                              color: Color(0xFF999999),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15),
+                          children: [
+                            TextSpan(
+                                text: feedback.apptID.toString(),
+                                style: TextStyle(
+                                    color: AppColors.colorEC407A,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15)),
+                          ],
+                        ),
                       ),
                       SizedBox(height: 5.5),
-                      Text(
-                        "Comment: " + feedback.comment.toString(),
-                        style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            color: Color(0xff4B4B4B),
-                            fontSize: 16),
+                      RichText(
+                        text: TextSpan(
+                          text: 'Comment: ',
+                          style: TextStyle(
+                              color: Color(0xFF999999),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15),
+                          children: [
+                            TextSpan(
+                                text: feedback.comment.toString(),
+                                style: TextStyle(
+                                    color: AppColors.color30A197,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15)),
+                          ],
+                        ),
                       ),
                     ],
                   )
