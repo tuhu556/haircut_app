@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:haircut_app/components/form_error.dart';
 import 'package:haircut_app/components/rounded_button.dart';
@@ -133,7 +134,27 @@ class _EditProfileState extends State<EditProfile> {
                             !isLoading
                                 ? new RoundedButton(
                                     text: "Update",
-                                    press: () {},
+                                    press: () async {
+                                      if (fullName!.isEmpty) {
+                                        addError(error: kNamelNullError);
+                                      } else if (phoneNumber == null || phoneNumber!.isEmpty) {
+                                        addError(error: kPhoneNumberNullError);
+                                      } else if (!phoneValidatorRegExp.hasMatch(phoneNumber!)) {
+                                        addError(error: kInvalidPhoneError);
+                                      } else {
+                                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                                        prefs.setString("name", fullName!);
+                                        prefs.setString("phone", phoneNumber!);
+                                        Flushbar(
+                                          title: "Notification",
+                                          message: "Your information has been successfully updated!",
+                                          duration: Duration(seconds: 3),
+                                        ).show(context);
+                                        setState(() {
+                                          errors.clear();
+                                        });
+                                      }
+                                    },
                                     color: AppColors.color3E3E3E,
                                     textColor: Colors.white)
                                 : Center(
@@ -195,9 +216,11 @@ class _EditProfileState extends State<EditProfile> {
       initialValue: fullName,
       onSaved: (newValue) => fullName = newValue ?? "",
       onChanged: (value) {
-        if (value.isNotEmpty) {
+        fullName = value;
+        /* if (value.isNotEmpty) {
           removeError(error: kNamelNullError);
-        }
+        } */
+        
         return null;
       },
       validator: (value) {
@@ -205,6 +228,7 @@ class _EditProfileState extends State<EditProfile> {
           addError(error: kNamelNullError);
           return "";
         }
+        
         return null;
       },
       decoration: InputDecoration(
@@ -225,14 +249,16 @@ class _EditProfileState extends State<EditProfile> {
       initialValue: phoneNumber,
       onSaved: (newValue) => phoneNumber = newValue ?? "",
       onChanged: (value) {
-        if (value.isNotEmpty) {
+        phoneNumber = value;
+        /* if (value.isNotEmpty) {
           removeError(error: kPhoneNumberNullError);
         } else if (phoneValidatorRegExp.hasMatch(value)) {
           removeError(error: kInvalidPhoneError);
-        }
+        } */
         return null;
       },
       validator: (value) {
+        phoneNumber = value;
         if (value!.isEmpty) {
           addError(error: kPhoneNumberNullError);
           return "";
